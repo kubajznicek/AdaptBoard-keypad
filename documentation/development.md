@@ -28,7 +28,7 @@ program for displaying output from serial port
 copying files to the board
 
 ```bash
-cp -r main.py /media/jakub/CIRCUITPY/
+cp -r main.py /media/$USER/CIRCUITPY/
 ```
 
 ## Debugging
