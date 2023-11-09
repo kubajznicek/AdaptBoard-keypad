@@ -5,7 +5,7 @@ import board # type: ignore
 import neopixel # type: ignore
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
-print("hello ben")
+print("hello kuba")
 
 while True:
     pixels.fill((255, 0, 0))
