@@ -47,8 +47,23 @@ def SetChannel(channel: int, mpc_pins: tuple[digitalio.DigitalInOut]):
 
     binary_channel = bin(channel)[2:]
     binary_channel = '0' * (4 - len(binary_channel)) + binary_channel    
+    print("🚀 ~ file: functions.py:50 ~ binary_channel:", binary_channel)
 
-    SetDigitalPin(mpc_pins[0], binary_channel[0] == '1')
-    SetDigitalPin(mpc_pins[1], binary_channel[1] == '1')
-    SetDigitalPin(mpc_pins[2], binary_channel[2] == '1')
-    SetDigitalPin(mpc_pins[3], binary_channel[3] == '1')
+    SetDigitalPin(mpc_pins[0], binary_channel[1] == '1')
+    SetDigitalPin(mpc_pins[1], binary_channel[2] == '1')
+    SetDigitalPin(mpc_pins[2], binary_channel[3] == '1')
+    SetDigitalPin(mpc_pins[3], binary_channel[0] == '1')
+
+def LogChannel(mpc_pins: tuple[digitalio.DigitalInOut]):
+    """
+    Logs the current channel to the console.
+
+    This function reads the current channel of the multiplexer and prints it to the console.
+
+    Args:
+        mpc_pins (list[digitalio.DigitalInOut]): The list of digital pins to read. Must be of length 4.
+    """
+    channel = 0
+    for i in range(4):
+        channel += mpc_pins[i].value * 2**i
+    print(channel)
