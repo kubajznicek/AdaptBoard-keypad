@@ -46,13 +46,13 @@ def SetChannel(channel: int, mpc_pins: tuple[digitalio.DigitalInOut]):
     
 
     binary_channel = bin(channel)[2:]
-    binary_channel = '0' * (4 - len(binary_channel)) + binary_channel    
-    print("🚀 ~ file: functions.py:50 ~ binary_channel:", binary_channel)
+    binary_channel = '0' * (4 - len(binary_channel)) + binary_channel
+    binary_channel = "".join(reversed(binary_channel))   # Reverse the string
 
-    SetDigitalPin(mpc_pins[0], binary_channel[1] == '1')
-    SetDigitalPin(mpc_pins[1], binary_channel[2] == '1')
-    SetDigitalPin(mpc_pins[2], binary_channel[3] == '1')
-    SetDigitalPin(mpc_pins[3], binary_channel[0] == '1')
+    SetDigitalPin(mpc_pins[0], binary_channel[0] == '1')
+    SetDigitalPin(mpc_pins[1], binary_channel[1] == '1')
+    SetDigitalPin(mpc_pins[2], binary_channel[2] == '1')
+    SetDigitalPin(mpc_pins[3], binary_channel[3] == '1')
 
 def LogChannel(mpc_pins: tuple[digitalio.DigitalInOut]):
     """
