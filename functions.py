@@ -1,7 +1,7 @@
 def SetDigitalPin(pin: digitalio.DigitalInOut, value: bool):
     pin.value = value
 
-def SetUpPinsForMCP(mcp_pins: tuple[Pin]):
+def SetUpPinsForMCP(mcp_pins: tuple[microcontroller.Pin]):
     """
     Sets up the specified pins for the analog multiplexer.
 
@@ -67,3 +67,19 @@ def LogChannel(mpc_pins: tuple[digitalio.DigitalInOut]):
     for i in range(4):
         channel += mpc_pins[i].value * 2**i
     print(channel)
+
+def LogCpuInfo():
+    """
+    Logs CPU information to the console.
+
+    This function prints the CPU frequency, temperature, and voltage to the console.
+    """
+    import microcontroller
+
+    cpus = microcontroller.cpus
+
+    for cpu in cpus:
+        print("CPU frequency: " + str(cpu.frequency))
+        print("Temperature: " + str(cpu.temperature))
+        print("Voltage: " + str(cpu.voltage))
+        print()
