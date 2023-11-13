@@ -20,7 +20,7 @@ cc = ConsumerControl(usb_hid.devices)
 
     
 SetChannel(10, mcp_pins)
-threshold = 160
+threshold = 170
 position = analog_pin.value
 lastPosition = position
 
