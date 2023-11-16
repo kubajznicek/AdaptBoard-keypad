@@ -23,9 +23,10 @@ cc = ConsumerControl(usb_hid.devices)
 
 
     
-SetChannel(10, mcp_pins)
+SetChannel(0, mcp_pins)
 threshold = 170
 position = analog_pin.value
+lastPosition_1 = position
 lastPosition = position
 
 
@@ -51,12 +52,24 @@ while True:
     # print("cisty signal", analog_pin.value)
     
     #region Analog Read
+    SetChannel(10, mcp_pins)
     position = analog_pin.value
-    if abs(lastPosition - position) > threshold:
-        if lastPosition < position:
+    if abs(lastPosition_1 - position) > threshold:
+        if lastPosition_1 < position:
             cc.send(ConsumerControlCode.VOLUME_INCREMENT)
         else:
             cc.send(ConsumerControlCode.VOLUME_DECREMENT)
+
+    lastPosition_1 = position
+
+
+    SetChannel(0, mcp_pins)
+    position = analog_pin.value
+    if abs(lastPosition - position) > threshold:
+        if lastPosition < position:
+            cc.send(ConsumerControlCode.BRIGHTNESS_DECREMENT)
+        else:
+            cc.send(ConsumerControlCode.BRIGHTNESS_INCREMENT )
 
     lastPosition = position
     #endregion
