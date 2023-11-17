@@ -52,6 +52,8 @@ while True:
     # print("cisty signal", analog_pin.value)
     
     #region Analog Read
+    #TODO: Make this a function
+    #TODO: mozna kontrolovat treba 3 cykly dozadu (kdyz clovek posune rychle, tak se to nezaregistruje)
     SetChannel(10, mcp_pins)
     position = analog_pin.value
     if abs(lastPosition_1 - position) > threshold:
@@ -75,4 +77,4 @@ while True:
     #endregion
 
     
-    time.sleep(0.1)
+    time.sleep(0.05)
