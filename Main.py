@@ -2,6 +2,8 @@ import time
 import board # type: ignore
 import keypad  # type: ignore
 import microcontroller # type: ignore
+from micropython import const # type: ignore
+
 
 import neopixel # type: ignore
 import analogio # type: ignore
@@ -10,24 +12,26 @@ import usb_hid  # type: ignore
 from adafruit_hid.consumer_control import ConsumerControl # type: ignore
 from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore
 
-from functions import SetChannel, SetUpPinsForMCP, LogChannel, LogCpuInfo
-
+from functions import log_cpu_info
+from AnalogSignalProcessor import AnalogSignalProcessor
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
 analog_pin = analogio.AnalogIn(board.A0)
 
-mcp_pins = SetUpPinsForMCP((board.D0, board.D1, board.D2, board.D3))
+my_analog = AnalogSignalProcessor((board.D0, board.D1, board.D2, board.D3))
 matrix = keypad.KeyMatrix([board.D5, board.D6], [board.D7, board.D8])
 
 cc = ConsumerControl(usb_hid.devices)
 
 
     
-SetChannel(0, mcp_pins)
-threshold = 170
+my_analog.set_channel(0)
+threshold = 190
 position = analog_pin.value
 lastPosition_1 = position
 lastPosition = position
+
+my_analog.log_channel()
 
 
 matrix_actions = {
@@ -36,7 +40,6 @@ matrix_actions = {
     2: ConsumerControlCode.SCAN_NEXT_TRACK,
     3: ConsumerControlCode.SCAN_PREVIOUS_TRACK,
 }
-
 
 print("Ready!")
 while True:
@@ -54,7 +57,7 @@ while True:
     #region Analog Read
     #TODO: Make this a function
     #TODO: mozna kontrolovat treba 3 cykly dozadu (kdyz clovek posune rychle, tak se to nezaregistruje)
-    SetChannel(10, mcp_pins)
+    my_analog.set_channel(10)
     position = analog_pin.value
     if abs(lastPosition_1 - position) > threshold:
         if lastPosition_1 < position:
@@ -65,7 +68,7 @@ while True:
     lastPosition_1 = position
 
 
-    SetChannel(0, mcp_pins)
+    my_analog.set_channel(0)
     position = analog_pin.value
     if abs(lastPosition - position) > threshold:
         if lastPosition < position:
@@ -77,4 +80,4 @@ while True:
     #endregion
 
     
-    time.sleep(0.05)
+    time.sleep(0.06)
