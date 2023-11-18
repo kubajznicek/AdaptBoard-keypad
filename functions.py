@@ -1,3 +1,6 @@
+import microcontroller # type: ignore
+
+
 def set_digital_pin(pin: digitalio.DigitalInOut, value: bool):
     pin.value = value
 
@@ -7,7 +10,6 @@ def log_cpu_info():
 
     This function prints the CPU frequency, temperature, and voltage to the console.
     """
-    import microcontroller
 
     CPUS = microcontroller.cpus
 
