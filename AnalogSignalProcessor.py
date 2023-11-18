@@ -1,18 +1,24 @@
 from micropython import const # type: ignore
-# import microcontroller
 import digitalio # type: ignore
+import analogio # type: ignore
+
 from functions import set_digital_pin
 
 class AnalogSignalProcessor:
-    def __init__(self, mpc_pins: tuple[microcontroller.Pin]):
+    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin]):
+        self.__analog_pin = analogio.AnalogIn(analog_pin)
+        self.__mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
         self.channel = 0
-        self.mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
+        self.set_channel(0)
+
+        # self.values = self.generate_values_dict()
+
 
     def __str__(self) -> str:
         return f"AnalogSignalProcessor: \n Current channel is {self.channel}."
 
 
-    def set_up_pins_for_mpc(self, mpc_pins: tuple[microcontroller.Pin]):
+    def set_up_pins_for_mpc(self, mpc_pins: tuple[microcontroller.Pin]) -> tuple[digitalio.DigitalInOut]:
         """
         Sets up the specified pins for the analog multiplexer.
 
@@ -38,6 +44,21 @@ class AnalogSignalProcessor:
 
         return output_pins
     
+    def generate_values_dict(self, num_past_reads: int) -> dict[int, list]:
+        """
+        Generates a dictionary of past values.
+
+        This function takes an integer representing the number of past reads to store and returns a dictionary of past values for each channel.
+
+        Args:
+            num_past_reads (int): The number of past reads to store.
+
+        Returns:
+            dict[int, list]: A dictionary of past values.
+        """
+
+        return {channel: [0] * num_past_reads for channel in range(0, 16)}
+
     def log_channel(self):
         """
         Logs the current channel to the console.
@@ -46,6 +67,15 @@ class AnalogSignalProcessor:
         """
         print("Multiplexer set to channel", self.channel)
     
+    def log_values(self):
+        """
+        Logs the current values to the console.
+
+        This function reads the current values of the multiplexer and prints them to the console.
+        """
+        for channel in self.values:
+            print(f"Channel {channel}: {self.values[channel]}")
+
     def set_channel(self, channel: int):
         """
         Sets the channel for a 4-pin digital output device.
@@ -62,7 +92,7 @@ class AnalogSignalProcessor:
         if not 0 <= channel <= 15:
             raise ValueError("Channel must be between 0 and 15")
 
-        mpc_pins = self.mpc_pins
+        mpc_pins = self.__mpc_pins
         self.channel = channel
 
         binary_channel = bin(channel)[2:]
@@ -73,9 +103,14 @@ class AnalogSignalProcessor:
         set_digital_pin(mpc_pins[1], binary_channel[1] == '1')
         set_digital_pin(mpc_pins[2], binary_channel[2] == '1')
         set_digital_pin(mpc_pins[3], binary_channel[3] == '1')
-        
-        
 
-    def process(self):
-        print("AnalogSignalProcessor: Digitally processing analog signal.")
-        return self.signal
+    def read_analog(self) -> int:
+        """
+        Reads the analog value from the multiplexer.
+
+        This function reads the analog value from the multiplexer and returns it as an integer.
+        """
+
+        # jak dlouho cte signala nez to digitalizuje
+
+        return self.__analog_pin.value

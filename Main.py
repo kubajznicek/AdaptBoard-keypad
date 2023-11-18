@@ -6,7 +6,6 @@ from micropython import const # type: ignore
 
 
 import neopixel # type: ignore
-import analogio # type: ignore
 import usb_hid  # type: ignore
 
 from adafruit_hid.consumer_control import ConsumerControl # type: ignore
@@ -16,20 +15,15 @@ from functions import log_cpu_info
 from AnalogSignalProcessor import AnalogSignalProcessor
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
-analog_pin = analogio.AnalogIn(board.A0)
 
-my_analog = AnalogSignalProcessor((board.D0, board.D1, board.D2, board.D3))
+
+my_analog = AnalogSignalProcessor(board.A0, (board.D0, board.D1, board.D2, board.D3))
 matrix = keypad.KeyMatrix([board.D5, board.D6], [board.D7, board.D8])
 
 cc = ConsumerControl(usb_hid.devices)
 
-
-    
-my_analog.set_channel(0)
 threshold = 190
-position = analog_pin.value
-lastPosition_1 = position
-lastPosition = position
+
 
 my_analog.log_channel()
 
@@ -44,7 +38,6 @@ matrix_actions = {
 print("Ready!")
 while True:
     keyEvent = matrix.events.get()
-    # print("events", keyEvent)
 
     if keyEvent and keyEvent.pressed:
         print("event info", keyEvent.key_number)
@@ -52,32 +45,35 @@ while True:
         cc.send(matrix_actions[keyEvent.key_number])
 
 
-    # print("cisty signal", analog_pin.value)
-    
     #region Analog Read
-    #TODO: Make this a function
-    #TODO: mozna kontrolovat treba 3 cykly dozadu (kdyz clovek posune rychle, tak se to nezaregistruje)
-    my_analog.set_channel(10)
-    position = analog_pin.value
-    if abs(lastPosition_1 - position) > threshold:
-        if lastPosition_1 < position:
-            cc.send(ConsumerControlCode.VOLUME_INCREMENT)
-        else:
-            cc.send(ConsumerControlCode.VOLUME_DECREMENT)
-
-    lastPosition_1 = position
+    # import time
 
 
-    my_analog.set_channel(0)
-    position = analog_pin.value
-    if abs(lastPosition - position) > threshold:
-        if lastPosition < position:
-            cc.send(ConsumerControlCode.BRIGHTNESS_DECREMENT)
-        else:
-            cc.send(ConsumerControlCode.BRIGHTNESS_INCREMENT )
+    for channel in range(0, 16):
+        my_analog.set_channel(channel)
+        my_analog.read_analog()
 
-    lastPosition = position
+
+
+
+
+
+
+
+    # start_time = time.time()
+    # for i in range(0, 1000):
+        # for channel in range(0, 16):
+            # my_analog.set_channel(channel)
+            # my_analog.read_analog()
+    # end_time = time.time()
+    # print(f"The code took {end_time - start_time} seconds to run.")
+
+
+
+
+    # print("cisty signal", my_analog.read_analog())
+
     #endregion
 
     
-    time.sleep(0.06)
+    # time.sleep(0.06)
