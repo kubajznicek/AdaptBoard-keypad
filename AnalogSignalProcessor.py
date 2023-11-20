@@ -1,17 +1,15 @@
 from micropython import const # type: ignore
 import digitalio # type: ignore
-import analogio # type: ignore
+from analogio import AnalogIn # type: ignore
 
 from functions import set_digital_pin
 
 class AnalogSignalProcessor:
     def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin]):
-        self.__analog_pin = analogio.AnalogIn(analog_pin)
+        self.__analog_pin = AnalogIn(analog_pin)
         self.__mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
         self.channel = 0
         self.set_channel(0)
-
-        # self.values = self.generate_values_dict()
 
 
     def __str__(self) -> str:
@@ -44,21 +42,6 @@ class AnalogSignalProcessor:
 
         return output_pins
     
-    def generate_values_dict(self, num_past_reads: int) -> dict[int, list]:
-        """
-        Generates a dictionary of past values.
-
-        This function takes an integer representing the number of past reads to store and returns a dictionary of past values for each channel.
-
-        Args:
-            num_past_reads (int): The number of past reads to store.
-
-        Returns:
-            dict[int, list]: A dictionary of past values.
-        """
-
-        return {channel: [0] * num_past_reads for channel in range(0, 16)}
-
     def log_channel(self):
         """
         Logs the current channel to the console.
@@ -111,6 +94,6 @@ class AnalogSignalProcessor:
         This function reads the analog value from the multiplexer and returns it as an integer.
         """
 
-        # jak dlouho cte signala nez to digitalizuje
+        # jak dlouho cte signal nez to digitalizuje
 
         return self.__analog_pin.value
