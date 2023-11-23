@@ -1,6 +1,7 @@
 import time
 import board # type: ignore
 import keypad  # type: ignore
+import digitalio # type: ignore
 import array
 from micropython import const # type: ignore
 
@@ -16,7 +17,7 @@ from AnalogSignalProcessor import AnalogSignalProcessor
 
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
-my_analog = AnalogSignalProcessor(board.A0, (board.D0, board.D1, board.D2, board.D3))
+my_analog = AnalogSignalProcessor(board.A0, (board.D10, board.MOSI, board.MISO, board.SCK))
 matrix = keypad.KeyMatrix([board.D5, board.D6], [board.D7, board.D8])
 cc = ConsumerControl(usb_hid.devices)
 
@@ -51,18 +52,27 @@ while True:
 
     #region Analog Read
 
+    # for channel in range(0, 16):
+    #     my_analog.set_channel(channel)
+    #     difference = abs(analog_values[channel] - my_analog.read_analog())
+    #     if difference > ANALOG_THRESHOLD:
+    #         triggered = round(difference/ANALOG_THRESHOLD)
+    #         increased = analog_values[channel] < my_analog.read_analog()
+    #         # print("channel", channel, "difference", difference, "triggered", triggered)
+    #         for i in range(0, triggered):
+    #             if increased:
+    #                 cc.send(ConsumerControlCode.VOLUME_INCREMENT)
+    #             else:
+    #                 cc.send(ConsumerControlCode.VOLUME_DECREMENT)
+
+
     for channel in range(0, 16):
         my_analog.set_channel(channel)
         difference = abs(analog_values[channel] - my_analog.read_analog())
         if difference > ANALOG_THRESHOLD:
-            triggered = round(difference/ANALOG_THRESHOLD)
-            increased = analog_values[channel] < my_analog.read_analog()
-            # print("channel", channel, "difference", difference, "triggered", triggered)
-            for i in range(0, triggered):
-                if increased:
-                    cc.send(ConsumerControlCode.VOLUME_INCREMENT)
-                else:
-                    cc.send(ConsumerControlCode.VOLUME_DECREMENT)
+            print("channel", channel, "difference", difference)
+
+        
 
             # increased = analog_values[channel] < my_analog.read_analog()
             # # print("channel", channel, "difference", difference, "triggered", triggered)
