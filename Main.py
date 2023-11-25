@@ -9,9 +9,10 @@ from micropython import const # type: ignore
 import neopixel # type: ignore
 import usb_hid  # type: ignore
 from adafruit_hid.consumer_control import ConsumerControl # type: ignore
-from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore
+from adafruit_hid.keyboard import Keyboard  # type: ignore
 
 from functions import log_cpu_info
+from matrix_config import MATRIX_ACTIONS
 from AnalogSignalProcessor import AnalogSignalProcessor
 
 
@@ -20,15 +21,10 @@ pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
 my_analog = AnalogSignalProcessor(board.A0, (board.D10, board.MOSI, board.MISO, board.SCK))
 matrix = keypad.KeyMatrix([board.D5, board.D6], [board.D7, board.D8])
 cc = ConsumerControl(usb_hid.devices)
+kbd = Keyboard(usb_hid.devices)
 
 ANALOG_THRESHOLD = const(300)
 
-MATRIX_ACTIONS = {
-    0: ConsumerControlCode.PLAY_PAUSE,
-    1: ConsumerControlCode.MUTE,
-    2: ConsumerControlCode.SCAN_NEXT_TRACK,
-    3: ConsumerControlCode.SCAN_PREVIOUS_TRACK,
-}
 
 analog_values = array.array("H", [0]*16)
 
@@ -45,9 +41,8 @@ while True:
     key_event = matrix.events.get()
 
     if key_event and key_event.pressed:
-        print("event info", key_event.key_number)
-        print("action", MATRIX_ACTIONS[key_event.key_number])
-        cc.send(MATRIX_ACTIONS[key_event.key_number])
+        print("pressed key number:", key_event.key_number)
+        MATRIX_ACTIONS[key_event.key_number](cc, kbd)
 
 
     #region Analog Read

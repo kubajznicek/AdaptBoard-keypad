@@ -22,7 +22,8 @@ class AnalogSignalProcessor:
 
         This function takes a tuple of Pin objects, sets each one as a digital output pin, and returns a tuple of the configured pins.
 
-        Args:
+        Parameters
+        ----------
             mpc_pins (tuple[Pin]): A tuple of Pin objects to be set up for the multiplexer.
 
             !!! note
@@ -30,7 +31,8 @@ class AnalogSignalProcessor:
 
                 Pins must be in order from least significant bit to most significant bit.
 
-        Returns:
+        Returns
+        -------
             tuple[DigitalInOut]: A tuple of DigitalInOut objects corresponding to the pins that have been set up.
 
         """
@@ -65,10 +67,12 @@ class AnalogSignalProcessor:
 
         This function takes an integer representing the channel number, converts it to binary, and sets each of the 4 digital pins to the corresponding binary digit.
 
-        Args:
+        Parameters
+        ----------
             channel (int): The channel number to set. Must be between 0 and 15 (inclusive).
 
-        Raises:
+        Raises
+        ------
             ValueError: If the channel number is not between 0 and 15.
         """
 
