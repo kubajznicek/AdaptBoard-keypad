@@ -2,6 +2,7 @@ import time
 import board # type: ignore
 import keypad  # type: ignore
 import digitalio # type: ignore
+import busio # type: ignore
 import array
 from micropython import const # type: ignore
 
@@ -19,14 +20,19 @@ from AnalogSignalProcessor import AnalogSignalProcessor
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
 my_analog = AnalogSignalProcessor(board.A0, (board.D10, board.MOSI, board.MISO, board.SCK))
+
+# https://docs.circuitpython.org/en/latest/shared-bindings/keypad/index.html#keypad.KeyMatrix
 matrix = keypad.KeyMatrix([board.D5, board.D6], [board.D7, board.D8])
+
+# https://docs.circuitpython.org/en/latest/shared-bindings/busio/index.html
+# i2c_pokus = busio.I2C(board.A3, board.A2)
 cc = ConsumerControl(usb_hid.devices)
 kbd = Keyboard(usb_hid.devices)
 
-ANALOG_THRESHOLD = const(300)
-
-
 analog_values = array.array("H", [0]*16)
+ANALOG_THRESHOLD:int = const(300)
+
+
 
 
 # fill analog_values with initial values
@@ -35,8 +41,11 @@ for channel in range(0, 16):
     my_analog.set_channel(channel)
     analog_values[channel] = my_analog.read_analog()
 
+
 log_cpu_info()
 print("Ready!")
+
+
 while True:
     key_event = matrix.events.get()
 
