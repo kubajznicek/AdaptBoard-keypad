@@ -57,6 +57,8 @@ while True:
     if not button_2.value:
         pixel.fill((0, 255, 0))
         kbd.send(Keycode.LEFT_CONTROL, Keycode.LEFT_ALT, Keycode.N)
+        time.sleep(0.1)
+        layout.write("Felda srdi!!!\n")
         time.sleep(0.5)
     elif not button_3.value:
         pixel.fill((0, 0, 255))
