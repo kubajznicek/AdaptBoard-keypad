@@ -31,8 +31,10 @@ kbd = Keyboard(usb_hid.devices)
 analog_values = array.array("H", [0]*16)
 ANALOG_THRESHOLD:int = const(300)
 
-
-
+# get keys of analog actions and put them inti an array
+CHANNELS = []
+for key in ANALOG_ACTIONS.keys():
+    CHANNELS.append(key)
 
 
 # fill analog_values with initial values
@@ -67,7 +69,7 @@ while True:
     #             ANALOG_ACTIONS[channel][increased](cc)
 
 
-    for channel in range(0, 16):
+    for channel in CHANNELS:
         my_analog.set_channel(channel)
         difference = abs(analog_values[channel] - my_analog.read_analog())
         if difference > ANALOG_THRESHOLD:
