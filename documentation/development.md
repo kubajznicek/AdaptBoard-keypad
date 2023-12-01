@@ -10,9 +10,9 @@ To get started, you'll need to install the latest version of CircuitPython for y
 
 The following libraries are required for the AdaptBoard-keypad to work:
 
-adafruit_pixelbuf.mpy
-neopixel.mpy
-adafruit_hid
+- adafruit_pixelbuf.mpy
+- neopixel.mpy
+- adafruit_hid
 
 program for displaying output from serial port
 - Linux **screen** or **minicom**
