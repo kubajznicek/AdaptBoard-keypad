@@ -11,6 +11,10 @@ adafruit-circuitpython-bundle-*
 **/build
 **/build**
 
+# pcb design backup
+*.kicad_pcb-bak
+**/pcb-backups/**
+
 log
 *.log
 .vscode
