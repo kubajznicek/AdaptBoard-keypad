@@ -1,5 +1,6 @@
 from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore
 from adafruit_hid.keycode import Keycode # type: ignore
+from micropython import const # type: ignore
 
 MATRIX_ACTIONS = {
     0: lambda cc, kbd: cc.send(ConsumerControlCode.PLAY_PAUSE),
@@ -15,3 +16,6 @@ ANALOG_ACTIONS = {
         False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
     },
 }
+
+ANALOG_THRESHOLD:int = const(300) # optimal value for Windows 10 is around 200
+DEBUG:bool = const(True)
