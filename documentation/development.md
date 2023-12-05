@@ -1,6 +1,7 @@
 # Developing for AdaptBoard-keypad
 
 AdaptBoard software is written in CircuitPython, a subset of Python 3. It is designed to be easy to use and to run on microcontrollers with small amounts of RAM and flash memory. CircuitPython is open source and available on [GitHub](https://github.com/adafruit/circuitpython).
+[CircuitPython tricks](https://github.com/todbot/circuitpython-tricks)
 
 ## Getting Started
 
