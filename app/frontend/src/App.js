@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 
+import Dnd from "./DnD"
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -28,6 +30,8 @@ class App extends Component {
       <div>
         <div>{this.state.nakejtext}</div>
         <button onClick={() => this.getText()}>Get text</button>
+        <br />
+        <Dnd />
       </div>
     )
   }
