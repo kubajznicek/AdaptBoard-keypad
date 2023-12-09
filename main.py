@@ -71,12 +71,13 @@ while True:
 
     for channel in CHANNELS:
         my_analog.set_channel(channel)
-        difference = abs(analog_values[channel] - my_analog.read_analog())
+        current_value = my_analog.read_analog()
+        difference = abs(analog_values[channel] - current_value)
         if difference > ANALOG_THRESHOLD:
             if DEBUG:
                 print("channel", channel, "difference", difference)
-            increased = analog_values[channel] < my_analog.read_analog()
+            increased = analog_values[channel] < current_value
             ANALOG_ACTIONS[channel][increased](cc)
 
-        analog_values[channel] = my_analog.read_analog()
+        analog_values[channel] = current_value
     #endregion
