@@ -32,8 +32,8 @@ class App extends Component {
                 <div>{this.state.nakejtext}</div>
                 <button onClick={() => this.getText()}>Get text</button>
                 <br />
-                <DraggableItem id="item1">Drag me! 1</DraggableItem>
-                <DraggableItem id="item2">Drag me! 2</DraggableItem>
+                <DraggableItem id="item1" image="./images/1.png">Drag me! 1</DraggableItem>
+                <DraggableItem id="item2" image="./images/2.png">Drag me! 2</DraggableItem>
                 <DraggableItem id="item3">Drag me! pepa</DraggableItem>
 
                 <DropTarget/>
