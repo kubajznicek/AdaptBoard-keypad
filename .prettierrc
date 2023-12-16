@@ -1,0 +1,10 @@
+{
+    "printWidth": 500,
+    "tabWidth": 4,
+    "semi": true,
+    "jsxBracketSameLine": true,
+    "arrowParens": "always",
+    "htmlWhitespaceSensitivity": "ignore",
+    "bracketSameLine": true,
+    "singleAttributePerLine": false
+}
