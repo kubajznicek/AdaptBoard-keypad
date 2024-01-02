@@ -50,8 +50,7 @@ while True:
     key_event = matrix.events.get()
 
     if key_event and key_event.pressed:
-        if DEBUG:
-            print("pressed key number:", key_event.key_number)
+        print("pressed key number:", key_event.key_number)
         MATRIX_ACTIONS[key_event.key_number](cc, kbd)
 
 
@@ -73,9 +72,9 @@ while True:
         my_analog.set_channel(channel)
         current_value = my_analog.read_analog()
         difference = abs(analog_values[channel] - current_value)
+        # print(f"channel {channel} value {current_value}")
         if difference > ANALOG_THRESHOLD:
-            if DEBUG:
-                print("channel", channel, "difference", difference)
+            # print("channel", channel, "difference", difference)
             increased = analog_values[channel] < current_value
             ANALOG_ACTIONS[channel][increased](cc)
 
