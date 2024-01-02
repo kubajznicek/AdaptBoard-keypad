@@ -14,7 +14,11 @@ ANALOG_ACTIONS = {
         True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
         False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
     },
+    7: {
+        True: lambda cc: print("channel 7 increased"),
+        False: lambda cc: print("channel 7 decreased"),
+    },
 }
 
 ANALOG_THRESHOLD:int = const(300) # optimal value for Windows 10 is around 200
-DEBUG:bool = const(False)
+DEBUG:bool = const(True)
