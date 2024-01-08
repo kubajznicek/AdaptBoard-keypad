@@ -14,10 +14,11 @@ ANALOG_ACTIONS = {
         True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
         False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
     },
-    7: {
-        True: lambda cc: print("channel 7 increased"),
-        False: lambda cc: print("channel 7 decreased"),
-    },
+}
+
+DISPLAY_CONFIG = {
+    "WIDTH": const(128),
+    "HEIGHT": const(32),
 }
 
 ANALOG_THRESHOLD:int = const(300) # optimal value for Windows 10 is around 200
