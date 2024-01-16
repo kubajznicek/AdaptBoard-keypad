@@ -45,7 +45,7 @@
         "silk_text_thickness": 0.15,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.5
+          "min_clearance": 0.0
         }
       },
       "diff_pair_dimensions": [
@@ -187,7 +187,7 @@
           "drill": 0.0
         },
         {
-          "diameter": 0.7,
+          "diameter": 0.9,
           "drill": 0.3
         }
       ],
@@ -423,7 +423,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.254,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -434,13 +434,13 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.3,
-        "via_diameter": 0.7,
+        "via_diameter": 0.9,
         "via_drill": 0.3,
         "wire_width": 6
       },
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.254,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -451,13 +451,13 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
-        "via_diameter": 0.7,
+        "via_diameter": 0.9,
         "via_drill": 0.3,
         "wire_width": 6
       },
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.254,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -468,7 +468,7 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
-        "via_diameter": 0.7,
+        "via_diameter": 0.9,
         "via_drill": 0.3,
         "wire_width": 6
       },
@@ -485,7 +485,24 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
-        "via_diameter": 0.7,
+        "via_diameter": 0.9,
+        "via_drill": 0.3,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.35,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "analog",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.3,
+        "via_diameter": 0.9,
         "via_drill": 0.3,
         "wire_width": 6
       }
@@ -497,7 +514,23 @@
     "netclass_assignments": {
       "+3.3V": "3.3V",
       "GND": "GND",
-      "Net-(J21-Pin_5)": "RAW"
+      "Net-(J10-Pin_3)": "analog",
+      "Net-(J11-Pin_3)": "analog",
+      "Net-(J12-Pin_3)": "analog",
+      "Net-(J13-Pin_3)": "analog",
+      "Net-(J14-Pin_3)": "analog",
+      "Net-(J15-Pin_3)": "analog",
+      "Net-(J16-Pin_3)": "analog",
+      "Net-(J17-Pin_3)": "analog",
+      "Net-(J18-Pin_3)": "analog",
+      "Net-(J19-Pin_3)": "analog",
+      "Net-(J20-Pin_3)": "analog",
+      "Net-(J21-Pin_5)": "RAW",
+      "Net-(J25-Pin_1)": "analog",
+      "Net-(J25-Pin_2)": "analog",
+      "Net-(J25-Pin_3)": "analog",
+      "Net-(J25-Pin_4)": "analog",
+      "Net-(J25-Pin_5)": "analog"
     },
     "netclass_patterns": []
   },
