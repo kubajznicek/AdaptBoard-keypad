@@ -1,11 +1,12 @@
-from micropython import const # type: ignore
 import digitalio # type: ignore
+from micropython import const # type: ignore
 from analogio import AnalogIn # type: ignore
 
+#local imports
 from functions import set_digital_pin
 
 class AnalogSignalProcessor:
-    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin]):
+    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin]) -> None:
         self.__analog_pin = AnalogIn(analog_pin)
         self.__mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
         self.channel = 0
@@ -44,7 +45,7 @@ class AnalogSignalProcessor:
 
         return output_pins
     
-    def log_channel(self):
+    def log_channel(self) -> None:
         """
         Logs the current channel to the console.
 
@@ -52,7 +53,7 @@ class AnalogSignalProcessor:
         """
         print("Multiplexer set to channel", self.channel)
     
-    def log_values(self):
+    def log_values(self) -> None:
         """
         Logs the current values to the console.
 
@@ -61,7 +62,7 @@ class AnalogSignalProcessor:
         for channel in self.values:
             print(f"Channel {channel}: {self.values[channel]}")
 
-    def set_channel(self, channel: int):
+    def set_channel(self, channel: int) -> None:
         """
         Sets the channel for a 4-pin digital output device.
 
