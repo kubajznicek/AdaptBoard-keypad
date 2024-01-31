@@ -7,10 +7,12 @@ MATRIX_ACTIONS = {
     1: lambda cc, kbd: cc.send(ConsumerControlCode.MUTE),
     2: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_UP),
     3: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_DOWN),
+    10: lambda cc, kbd: kbd.send(Keycode.A),
+    
 }
 
 ANALOG_ACTIONS = {
-    10: {
+    7: {
         True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
         False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
     },
@@ -21,5 +23,5 @@ DISPLAY_CONFIG = {
     "HEIGHT": const(32),
 }
 
-ANALOG_THRESHOLD:int = const(300) # optimal value for Windows 10 is around 200
+ANALOG_THRESHOLD:int = const(250) # optimal value for Windows 10 is around 200
 DEBUG:bool = const(True)
