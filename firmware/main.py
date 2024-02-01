@@ -18,12 +18,12 @@ from config import MATRIX_ACTIONS, ANALOG_ACTIONS, DISPLAY_CONFIG, ANALOG_THRESH
 from analog_signal_processor import AnalogSignalProcessor
 from ssd1306_display import ssd1306_display as display
 if DEBUG:
-    from functions import log_cpu_info, print_storage_info, print_ram_info
+    from functions import log_cpu_info, print_storage_info, print_ram_info, no_action
 
 
 displayio.release_displays()
 
-matrix = keypad.KeyMatrix([board.D5, board.D6], [board.D7, board.D8])   # https://docs.circuitpython.org/en/latest/shared-bindings/keypad/index.html#keypad.KeyMatrix
+matrix = keypad.KeyMatrix([board.D0, board.D1, board.D2, board.D3, board.D4], [board.D5, board.D6, board.D7, board.D8])   # https://docs.circuitpython.org/en/latest/shared-bindings/keypad/index.html#keypad.KeyMatrix
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)   # https://learn.adafruit.com/adafruit-kb2040/neopixel-led
 i2c = busio.I2C(board.A3, board.A2)     # https://docs.circuitpython.org/en/latest/shared-bindings/busio/index.html
 cc = ConsumerControl(usb_hid.devices)
@@ -91,8 +91,9 @@ while True:
     key_event = matrix.events.get()
 
     if key_event and key_event.pressed:
-        print("pressed key number:", key_event.key_number)
-        MATRIX_ACTIONS[key_event.key_number](cc, kbd)
+        # print("pressed key number:", key_event.key_number)
+        # MATRIX_ACTIONS.get(key_event.key_number, no_action(key_event.key_number))(cc, kbd) # nefunguje
+        MATRIX_ACTIONS[key_event.key_number](cc, kbd) # TODO at to nepada kdyz tam neni definovana klavesa (pokus o radek vys)
 
 
     #region Analog Read
