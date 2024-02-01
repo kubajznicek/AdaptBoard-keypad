@@ -7,8 +7,7 @@ MATRIX_ACTIONS = {
     1: lambda cc, kbd: cc.send(ConsumerControlCode.MUTE),
     2: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_UP),
     3: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_DOWN),
-    10: lambda cc, kbd: kbd.send(Keycode.A),
-    
+    19: lambda cc, kbd: kbd.send(Keycode.A, Keycode.B),
 }
 
 ANALOG_ACTIONS = {
