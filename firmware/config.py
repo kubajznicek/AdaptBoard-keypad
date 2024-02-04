@@ -7,17 +7,18 @@ MATRIX_ACTIONS = {
     1: lambda cc, kbd: cc.send(ConsumerControlCode.MUTE),
     2: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_UP),
     3: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_DOWN),
-    19: lambda cc, kbd: kbd.send(Keycode.A, Keycode.B),
+    4: lambda cc, kbd: kbd.send(Keycode.A, Keycode.B),
 }
 
 ANALOG_ACTIONS = {
     7: {
-        True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
-        False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
+        True: lambda cc: cc.send(ConsumerControlCode.BRIGHTNESS_INCREMENT),
+        False: lambda cc: cc.send(ConsumerControlCode.BRIGHTNESS_DECREMENT ),
     },
 }
 
 DISPLAY_CONFIG = {
+    "present": const(False),
     "WIDTH": const(128),
     "HEIGHT": const(32),
 }

@@ -74,6 +74,3 @@ def print_ram_info():
     print('Total RAM: ', total_ram)
     print('Used RAM: ', used_ram)
     print('Free RAM: ', free_ram)
-
-def no_action(key_number: int):
-    print(f"Warning! No action assigned to key {key_number}")
