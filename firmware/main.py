@@ -50,7 +50,7 @@ for key in ANALOG_ACTIONS.keys():
 
 # fill analog_values with initial values
 # this is done to prevent false positives on startup
-for channel in range(0, 16):
+for channel in CHANNELS:
     my_analog.set_channel(channel)
     analog_values[channel] = my_analog.read_analog()
 
