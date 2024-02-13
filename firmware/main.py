@@ -37,20 +37,27 @@ if DISPLAY_CONFIG["present"]:
     my_display.render_text("Hello World!", 28, DISPLAY_CONFIG["HEIGHT"] // 2 - 1)
     # my_display.render_image("./test.bmp")
 
-CHANNELS = []
+CHANNELS = []   # list of channels to be scanned
 for key in ANALOG_ACTIONS.keys():
     CHANNELS.append(key)
 
 # Initialize analog_values as a list of empty lists
-analog_values = [[] for _ in range(0, 16)]
+analog_values = [[] for _ in range(0, 16)]  # list of readings for each channel
+cooldown = [0 for _ in range(0, 16)]  # NOTE testing
+
+
+window_size = 3 # number of readings to average
+
+triggered = 0 # ! for development purposes only
 
 
 
 # fill analog_values with initial values
 # this is done to prevent false positives on startup
 for channel in CHANNELS:
-    my_analog.set_channel(channel)
-    analog_values[channel].append(my_analog.read_analog())
+    for i in range(0, window_size-1):
+        my_analog.set_channel(channel)
+        analog_values[channel].append(my_analog.read_analog())
 
 if DEBUG:
     print()
@@ -66,9 +73,11 @@ while True:
 
     if key_event and key_event.pressed:
         # print("pressed key number:", key_event.key_number)
-        is_configured = MATRIX_ACTIONS.get(key_event.key_number, False) # nefunguje
+        is_configured = MATRIX_ACTIONS.get(key_event.key_number, False)
         if is_configured:
             is_configured(cc, kbd)
+        if key_event.key_number == 15: # ! for development purposes only
+            triggered = 0
         else:
             print(f"WARNING!  -  Key {key_event.key_number} not configured")
 
@@ -88,6 +97,9 @@ while True:
 
 
     for channel in CHANNELS:
+        if cooldown[channel] > 0:
+            cooldown[channel] -= 1
+            continue
         my_analog.set_channel(channel)
         current_value = my_analog.read_analog()
         # filter for noise
@@ -96,7 +108,7 @@ while True:
         analog_values[channel].append(current_value)
 
         # If we have more than N readings, remove the oldest one
-        if len(analog_values[channel]) > 5:
+        if len(analog_values[channel]) > window_size:
             analog_values[channel].pop(0)
 
         # Calculate the moving average of the recent readings
@@ -104,11 +116,14 @@ while True:
 
 
         difference = abs(moving_average - current_value)
-        print(f"channel {channel} value {current_value}")
+        print(f"channel {channel} value {current_value} triggered {triggered}")
+
         if difference > ANALOG_THRESHOLD:
             # print("channel", channel, "difference", difference)
             increased = moving_average < current_value
             ANALOG_ACTIONS[channel][increased](cc)
+            cooldown[channel] = 400
+            triggered += 1
 
         # analog_values[channel] = current_value
     #endregion
