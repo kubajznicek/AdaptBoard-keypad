@@ -12,8 +12,8 @@ MATRIX_ACTIONS = {
 
 ANALOG_ACTIONS = {
     7: {
-        True: lambda cc: cc.send(ConsumerControlCode.BRIGHTNESS_INCREMENT),
-        False: lambda cc: cc.send(ConsumerControlCode.BRIGHTNESS_DECREMENT ),
+        True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
+        False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
     },
 }
 
@@ -23,5 +23,5 @@ DISPLAY_CONFIG = {
     "HEIGHT": const(32),
 }
 
-ANALOG_THRESHOLD:int = const(250) # optimal value for Windows 10 is around 200
+ANALOG_THRESHOLD:int = const(80) # optimal value for Windows 10 is around 200
 DEBUG:bool = const(True)

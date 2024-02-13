@@ -37,14 +37,12 @@ if DISPLAY_CONFIG["present"]:
     my_display.render_text("Hello World!", 28, DISPLAY_CONFIG["HEIGHT"] // 2 - 1)
     # my_display.render_image("./test.bmp")
 
-analog_values = array.array("H", [0]*16)
 CHANNELS = []
 for key in ANALOG_ACTIONS.keys():
     CHANNELS.append(key)
 
-
-
-
+# Initialize analog_values as a list of empty lists
+analog_values = [[] for _ in range(0, 16)]
 
 
 
@@ -52,7 +50,7 @@ for key in ANALOG_ACTIONS.keys():
 # this is done to prevent false positives on startup
 for channel in CHANNELS:
     my_analog.set_channel(channel)
-    analog_values[channel] = my_analog.read_analog()
+    analog_values[channel].append(my_analog.read_analog())
 
 if DEBUG:
     print()
@@ -92,12 +90,25 @@ while True:
     for channel in CHANNELS:
         my_analog.set_channel(channel)
         current_value = my_analog.read_analog()
-        difference = abs(analog_values[channel] - current_value)
+        # filter for noise
+
+        # Add the current reading to the list of recent readings for this channel
+        analog_values[channel].append(current_value)
+
+        # If we have more than N readings, remove the oldest one
+        if len(analog_values[channel]) > 5:
+            analog_values[channel].pop(0)
+
+        # Calculate the moving average of the recent readings
+        moving_average = sum(analog_values[channel]) / len(analog_values[channel])
+
+
+        difference = abs(moving_average - current_value)
         print(f"channel {channel} value {current_value}")
         if difference > ANALOG_THRESHOLD:
             # print("channel", channel, "difference", difference)
-            increased = analog_values[channel] < current_value
+            increased = moving_average < current_value
             ANALOG_ACTIONS[channel][increased](cc)
 
-        analog_values[channel] = current_value
+        # analog_values[channel] = current_value
     #endregion
