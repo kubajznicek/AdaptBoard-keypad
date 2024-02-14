@@ -14,6 +14,7 @@ ANALOG_ACTIONS = {
     7: {
         True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
         False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
+        "cool_down": 300,
     },
 }
 

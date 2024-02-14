@@ -4,17 +4,20 @@ from analogio import AnalogIn # type: ignore
 
 #local imports
 from functions import set_digital_pin
+from config import ANALOG_ACTIONS
 
 class AnalogSignalProcessor:
-    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin]) -> None:
+    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin],channels_to_scan: list, window_size:int = 5) -> None:
         self.__analog_pin = AnalogIn(analog_pin)
         self.__mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
-        self.channel = 0
-        self.set_channel(0)
 
+        self.channel_settings = ANALOG_ACTIONS
+        self.channel_states = [{"cool_down": 0} for _ in range(0, 16)]
+        self.channels_to_scan = channels_to_scan
+        self.window_size = window_size
+        self.analog_values = [[] for _ in range(0, 16)]  # list of past readings for each channel
 
-    def __str__(self) -> str:
-        return f"AnalogSignalProcessor: \n Current channel is {self.channel}."
+        self.fill_analog_values()
 
 
     def set_up_pins_for_mpc(self, mpc_pins: tuple[microcontroller.Pin]) -> tuple[digitalio.DigitalInOut]:
@@ -45,22 +48,14 @@ class AnalogSignalProcessor:
 
         return output_pins
     
-    def log_channel(self) -> None:
-        """
-        Logs the current channel to the console.
-
-        This function reads the current channel of the multiplexer and prints it to the console.
-        """
-        print("Multiplexer set to channel", self.channel)
-    
     def log_values(self) -> None:
         """
         Logs the current values to the console.
 
         This function reads the current values of the multiplexer and prints them to the console.
         """
-        for channel in self.values:
-            print(f"Channel {channel}: {self.values[channel]}")
+        for channel in self.channels_to_scan:
+            print(f"Channel {channel}: {self.analog_values[channel]}")
 
     def set_channel(self, channel: int) -> None:
         """
@@ -81,7 +76,6 @@ class AnalogSignalProcessor:
             raise ValueError("Channel must be between 0 and 15")
 
         mpc_pins = self.__mpc_pins
-        self.channel = channel
 
         binary_channel = bin(channel)[2:]
         binary_channel = '0' * (4 - len(binary_channel)) + binary_channel
@@ -102,3 +96,15 @@ class AnalogSignalProcessor:
         # jak dlouho cte signal nez to digitalizuje
 
         return self.__analog_pin.value
+    
+    def fill_analog_values(self) -> None:
+        """
+        Fills the analog values with initial values.
+
+        This function fills the list of analog values with initial values to prevent false positives on startup.
+        """
+
+        for channel in self.channels_to_scan:
+            for i in range(0, self.window_size - 1):
+                self.set_channel(channel)
+                self.analog_values[channel].append(self.read_analog())
