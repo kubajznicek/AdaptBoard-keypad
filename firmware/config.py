@@ -14,7 +14,7 @@ ANALOG_ACTIONS = {
     7: {
         True: lambda cc: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
         False: lambda cc: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
-        "cool_down": 300,
+        "steps": 18,
     },
 }
 
@@ -24,5 +24,4 @@ DISPLAY_CONFIG = {
     "HEIGHT": const(32),
 }
 
-ANALOG_THRESHOLD:int = const(100) # optimal value for Windows 10 is around 200
-DEBUG:bool = const(True)
+ANALOG_THRESHOLD = const(100) # spocitat (jaky noise ma moving_average + kus pro jistotu)
