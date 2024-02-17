@@ -1,7 +1,7 @@
 import gc
 import os
+import time
 import microcontroller # type: ignore
-import json
 
 def set_digital_pin(pin: digitalio.DigitalInOut, value: bool) -> None:
     pin.value = value
@@ -20,33 +20,6 @@ def log_cpu_info() -> None:
         print("Temperature: " + str(cpu.temperature))
         print("Voltage: " + str(cpu.voltage))
         print()
-
-def read_matrix_config(file_name: str) -> dict:
-    """
-    Reads the matrix configuration from the config file.
-
-    This function reads the matrix configuration from the config file and returns it as a dictionary.
-
-    Parameters
-    ----------
-    file_name : str
-        The name of the config file.
-
-    Returns
-    -------
-    dict
-        The matrix configuration.
-    """
-
-    with open(file_name, "r") as config_file:
-        config = json.load(config_file)
-        # stri away any comments beginning with __
-        config = {k: v for k, v in config.items() if not k.startswith("__")}
-        # convert dict keys to int
-        config = {int(k): v for k, v in config.items()}
-
-
-    return config
 
 def print_storage_info():
     """
@@ -74,3 +47,35 @@ def print_ram_info():
     print('Total RAM: ', total_ram)
     print('Used RAM: ', used_ram)
     print('Free RAM: ', free_ram)
+
+def set_neopixel_color(pixel: neopixel.NeoPixel, color: Tuple[int, int, int]) -> None:
+    """
+    Sets the color of the neopixel.
+
+    This function takes a neopixel object and a tuple of RGB values and sets the color of the neopixel to the specified color.
+
+    Parameters
+    ----------
+        pixel (neopixel.NeoPixel): The neopixel object to set the color of.
+        color (Tuple[int, int, int]): A tuple of RGB values representing the color to set the neopixel to.
+
+    """
+    pixel.fill(color)
+
+def start_up_blink(pixel: neopixel.NeoPixel):
+    """
+    Blinks the neopixel on startup.
+
+    This function blinks the neopixel on startup to indicate that the device is ready to use.
+
+    Parameters
+    ----------
+        pixel (neopixel.NeoPixel): The neopixel object to blink.
+    """
+    set_neopixel_color(pixel, (0, 0, 120))
+    time.sleep(0.1)
+    set_neopixel_color(pixel, (0, 0, 0))
+    time.sleep(0.1)
+    set_neopixel_color(pixel, (0, 0, 120))
+    time.sleep(0.1)
+    set_neopixel_color(pixel, (0, 0, 0))

@@ -2,23 +2,20 @@ import board # type: ignore
 import keypad  # type: ignore
 import busio # type: ignore
 import displayio # type: ignore
-import array
 
 # lib imports
 import neopixel # type: ignore
 import usb_hid  # type: ignore
 from adafruit_hid.consumer_control import ConsumerControl # type: ignore
 from adafruit_hid.keyboard import Keyboard  # type: ignore
-from adafruit_display_text import label # type: ignore
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS # type: ignore
 
 # local imports
-from config import MATRIX_ACTIONS, ANALOG_ACTIONS, DISPLAY_CONFIG, ANALOG_THRESHOLD, DEBUG
+from config import MATRIX_ACTIONS, ANALOG_ACTIONS, DISPLAY_CONFIG
+from functions import start_up_blink
 from analog_signal_processor import AnalogSignalProcessor
 if DISPLAY_CONFIG["present"]:
     from ssd1306_display import ssd1306_display as display
-if DEBUG:
-    from functions import log_cpu_info, print_storage_info, print_ram_info
 
 
 displayio.release_displays()
@@ -44,57 +41,41 @@ for key in ANALOG_ACTIONS.keys():
 
 my_analog = AnalogSignalProcessor(board.A0, (board.D10, board.MOSI, board.MISO, board.SCK), CHANNELS, 4)
 
-
-if DEBUG:
-    print()
-    log_cpu_info()
-    print()
-    print_storage_info()
-    print()
-    print_ram_info()
-    print("Ready!")
-
+print("Starting main loop")
+start_up_blink(pixels)
 while True:
+    # scan the keypad matrix
     key_event = matrix.events.get()
 
     if key_event and key_event.pressed:
-        # print("pressed key number:", key_event.key_number)
-        is_configured = MATRIX_ACTIONS.get(key_event.key_number, False)
-        if is_configured:
-            is_configured(cc, kbd, layout)
-        # if key_event.key_number == 4: # ! for development purposes only
-        #     layout.write("!@#$%^&*2š()_++}{';/./<?>:[}321654987*/-*/+00|\}]{[::??>><<~12]}]}")
+        key_action = MATRIX_ACTIONS.get(key_event.key_number, False)
+        if key_action:
+            key_action(cc, kbd, layout)
         else:
             print(f"WARNING!  -  Key {key_event.key_number} not configured")
+        # if key_event.key_number == 4: # ! for development purposes only
+            # layout.write("!@#$%^&*2š()_++}{';/./<?>:[}321654987*/-*/+00|\}]{[::??>><<~12]}]}")
 
 
     #region Analog Read
     for channel in CHANNELS:
-        if my_analog.channel_states[channel]["cool_down"] > 0:
-            my_analog.channel_states[channel]["cool_down"] -= 1
-            continue
         my_analog.set_channel(channel)
         current_value = my_analog.read_analog()
-        # filter for noise
 
-        # Add the current reading to the list of recent readings for this channel
-        my_analog.analog_values[channel].append(current_value)
+        # process the new reading
+        smoothed_value = my_analog.process_new_reading(channel, current_value)
+        current_step = my_analog.calculate_current_step(channel, smoothed_value)
 
-        # If we have more than N readings, remove the oldest one
-        if len(my_analog.analog_values[channel]) > my_analog.window_size:
-            my_analog.analog_values[channel].pop(0)
+        # print(moving_average, my_analog.channel_state[channel], current_step, current_value, 0, my_analog.__channel_settings[channel]["step_size"], my_analog.__channel_settings[channel]["step_size"]*2, my_analog.__channel_settings[channel]["step_size"]*3)
 
-        # Calculate the moving average of the recent readings
-        moving_average = sum(my_analog.analog_values[channel]) / len(my_analog.analog_values[channel])
-        print(f"channel {channel} moving average {moving_average} {current_value}")
+        # check if the step has changed
+        if my_analog.channel_state[channel] == current_step:
+            continue
 
+        # if the step has changed, perform the action
+        increased = my_analog.channel_state[channel] < current_step
+        ANALOG_ACTIONS[channel][increased](cc)
 
-        difference = abs(moving_average - current_value)
-        # print(f"channel {channel} value {current_value}")
-
-        if difference > ANALOG_THRESHOLD:
-            # print("channel", channel, "difference", difference)
-            increased = moving_average < current_value
-            ANALOG_ACTIONS[channel][increased](cc)
-            my_analog.channel_states[channel]["cool_down"] = my_analog.channel_settings[channel]["cool_down"]
+        # update the channel state
+        my_analog.channel_state[channel] = current_step
     #endregion

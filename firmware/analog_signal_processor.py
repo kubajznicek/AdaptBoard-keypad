@@ -4,21 +4,30 @@ from analogio import AnalogIn # type: ignore
 
 #local imports
 from functions import set_digital_pin
-from config import ANALOG_ACTIONS
+from config import ANALOG_ACTIONS, ANALOG_THRESHOLD
 
 class AnalogSignalProcessor:
     def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin],channels_to_scan: list, window_size:int = 5) -> None:
         self.__analog_pin = AnalogIn(analog_pin)
         self.__mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
+        self.__channel_settings = ANALOG_ACTIONS
+        self.__channels_to_scan = channels_to_scan
 
-        self.channel_settings = ANALOG_ACTIONS
-        self.channel_states = [{"cool_down": 0} for _ in range(0, 16)]
-        self.channels_to_scan = channels_to_scan
+        self.channel_state = [0 for _ in range(0, 16)]
         self.window_size = window_size
         self.analog_values = [[] for _ in range(0, 16)]  # list of past readings for each channel
 
+        # calculate step size for each channel
+        for channel in self.__channels_to_scan:
+            self.__channel_settings[channel]["step_size"] = self.calculate_step_size(channel)
+
+        # fill the analog values with initial values
         self.fill_analog_values()
 
+        # calculate the initial step for each channel
+        for channel in self.__channels_to_scan:
+            moving_average = sum(self.analog_values[channel]) / len(self.analog_values[channel])
+            self.channel_state[channel] = round(moving_average / self.__channel_settings[channel]["step_size"]) * self.__channel_settings[channel]["step_size"]
 
     def set_up_pins_for_mpc(self, mpc_pins: tuple[microcontroller.Pin]) -> tuple[digitalio.DigitalInOut]:
         """
@@ -48,13 +57,31 @@ class AnalogSignalProcessor:
 
         return output_pins
     
+    def calculate_step_size(self, channel: int) -> int:
+        """
+        Calculates the step size for a given channel.
+
+        This function takes a channel number and returns the step size for that channel.
+
+        Parameters
+        ----------
+            channel (int): The channel number for which to calculate the step size.
+
+        Returns
+        -------
+            int: The step size for the specified channel.
+
+        """
+
+        return int(65535 / self.__channel_settings[channel]["steps"])
+
     def log_values(self) -> None:
         """
         Logs the current values to the console.
 
         This function reads the current values of the multiplexer and prints them to the console.
         """
-        for channel in self.channels_to_scan:
+        for channel in self.__channels_to_scan:
             print(f"Channel {channel}: {self.analog_values[channel]}")
 
     def set_channel(self, channel: int) -> None:
@@ -104,7 +131,70 @@ class AnalogSignalProcessor:
         This function fills the list of analog values with initial values to prevent false positives on startup.
         """
 
-        for channel in self.channels_to_scan:
+        for channel in self.__channels_to_scan:
             for i in range(0, self.window_size - 1):
                 self.set_channel(channel)
                 self.analog_values[channel].append(self.read_analog())
+
+    def calculate_current_step(self, channel: int, current_value: int) -> int:
+        """
+        Calculates the current step for a given channel.
+
+        This function takes a channel number and a current value, and returns the current step for that channel.
+
+        Parameters
+        ----------
+            channel (int): The channel number for which to calculate the current step.
+            current_value (int): The current value for the specified channel.
+
+        Returns
+        -------
+            int: The current step for the specified channel.
+
+        """
+
+        # current_step = (current_value // self.channel_settings[channel]["step_size"]) * self.channel_settings[channel]["step_size"]
+        
+        # print("current_value", current_value, "channel_state", self.channel_state[channel], "step_size")
+        # print(current_value > (self.channel_state[channel] + self.channel_settings[channel]["step_size"]/2) + ANALOG_THRESHOLD)
+
+        # print("current_value", current_value, "channel_state", self.channel_state[channel], (self.channel_state[channel] + self.channel_settings[channel]["step_size"]/2) - ANALOG_THRESHOLD, (self.channel_state[channel] + self.channel_settings[channel]["step_size"]/2) + ANALOG_THRESHOLD)
+
+        if current_value > (self.channel_state[channel] + self.__channel_settings[channel]["step_size"]/2) + ANALOG_THRESHOLD:
+            return self.channel_state[channel] + self.__channel_settings[channel]["step_size"]
+        
+        elif current_value < (self.channel_state[channel] - self.__channel_settings[channel]["step_size"]/2) - ANALOG_THRESHOLD:
+            return self.channel_state[channel] - self.__channel_settings[channel]["step_size"]
+        
+        else:
+            # print("stay")
+            return self.channel_state[channel]
+
+    def process_new_reading(self, channel: int, current_value: int) -> int:
+        """
+        Processes a new reading for a given channel.
+
+        This function takes a channel number and a current value and processes the new reading for that channel. Filters out noise and returns the smoothed value.
+
+        Parameters
+        ----------
+            channel (int): The channel number for which to process the new reading.
+            current_value (int): The current value for the specified channel.
+
+        Returns
+        -------
+            int: The smoothed value for the specified channel.
+
+        """
+
+        # Add the current reading to the list of recent readings for this channel
+        self.analog_values[channel].append(current_value)
+
+        # If we have more than N readings, remove the oldest one
+        if len(self.analog_values[channel]) > self.window_size:
+            self.analog_values[channel].pop(0)
+
+        # Calculate the moving average of the recent readings
+        moving_average = sum(self.analog_values[channel]) / len(self.analog_values[channel])
+
+        return moving_average
