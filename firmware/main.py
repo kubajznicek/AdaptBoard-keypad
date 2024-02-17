@@ -10,6 +10,7 @@ import usb_hid  # type: ignore
 from adafruit_hid.consumer_control import ConsumerControl # type: ignore
 from adafruit_hid.keyboard import Keyboard  # type: ignore
 from adafruit_display_text import label # type: ignore
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS # type: ignore
 
 # local imports
 from config import MATRIX_ACTIONS, ANALOG_ACTIONS, DISPLAY_CONFIG, ANALOG_THRESHOLD, DEBUG
@@ -26,6 +27,7 @@ matrix = keypad.KeyMatrix([board.D0, board.D1, board.D2, board.D3, board.D4], [b
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)   # https://learn.adafruit.com/adafruit-kb2040/neopixel-led
 cc = ConsumerControl(usb_hid.devices)
 kbd = Keyboard(usb_hid.devices)
+layout = KeyboardLayoutUS(kbd)
 if DISPLAY_CONFIG["present"]:
     i2c = busio.I2C(board.A3, board.A2)     # https://docs.circuitpython.org/en/latest/shared-bindings/busio/index.html
     my_display = display(i2c, 0x3C, DISPLAY_CONFIG)
@@ -59,27 +61,14 @@ while True:
         # print("pressed key number:", key_event.key_number)
         is_configured = MATRIX_ACTIONS.get(key_event.key_number, False)
         if is_configured:
-            is_configured(cc, kbd)
-        if key_event.key_number == 15: # ! for development purposes only
-            triggered = 0
+            is_configured(cc, kbd, layout)
+        # if key_event.key_number == 4: # ! for development purposes only
+        #     layout.write("!@#$%^&*2š()_++}{';/./<?>:[}321654987*/-*/+00|\}]{[::??>><<~12]}]}")
         else:
             print(f"WARNING!  -  Key {key_event.key_number} not configured")
 
 
     #region Analog Read
-
-    # NOTE with triggered count
-    # for channel in CHANNELS:
-    #     my_analog.set_channel(channel)
-    #     difference = abs(analog_values[channel] - my_analog.read_analog())
-    #     if difference > ANALOG_THRESHOLD:
-    #         triggered = round(difference/ANALOG_THRESHOLD)
-    #         increased = analog_values[channel] < my_analog.read_analog()
-    #         # print("channel", channel, "difference", difference, "triggered", triggered)
-    #         for i in range(0, triggered):
-    #             ANALOG_ACTIONS[channel][increased](cc)
-
-
     for channel in CHANNELS:
         if my_analog.channel_states[channel]["cool_down"] > 0:
             my_analog.channel_states[channel]["cool_down"] -= 1
@@ -97,6 +86,7 @@ while True:
 
         # Calculate the moving average of the recent readings
         moving_average = sum(my_analog.analog_values[channel]) / len(my_analog.analog_values[channel])
+        print(f"channel {channel} moving average {moving_average} {current_value}")
 
 
         difference = abs(moving_average - current_value)
@@ -107,6 +97,4 @@ while True:
             increased = moving_average < current_value
             ANALOG_ACTIONS[channel][increased](cc)
             my_analog.channel_states[channel]["cool_down"] = my_analog.channel_settings[channel]["cool_down"]
-
-        # analog_values[channel] = current_value
     #endregion
