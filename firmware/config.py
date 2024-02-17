@@ -3,11 +3,11 @@ from adafruit_hid.keycode import Keycode # type: ignore
 from micropython import const # type: ignore
 
 MATRIX_ACTIONS = {
-    0: lambda cc, kbd: cc.send(ConsumerControlCode.PLAY_PAUSE),
-    1: lambda cc, kbd: cc.send(ConsumerControlCode.MUTE),
-    2: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_UP),
-    3: lambda cc, kbd: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_DOWN),
-    4: lambda cc, kbd: kbd.send(Keycode.A, Keycode.B),
+    0: lambda cc, kbd, layout: cc.send(ConsumerControlCode.PLAY_PAUSE),
+    1: lambda cc, kbd, layout: cc.send(ConsumerControlCode.MUTE),
+    2: lambda cc, kbd, layout: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_UP),
+    3: lambda cc, kbd, layout: kbd.send(Keycode.CONTROL, Keycode.ALT, Keycode.SHIFT, Keycode.PAGE_DOWN),
+    4: lambda cc, kbd, layout: layout.write("Hello, World!"),
 }
 
 ANALOG_ACTIONS = {
@@ -24,5 +24,5 @@ DISPLAY_CONFIG = {
     "HEIGHT": const(32),
 }
 
-ANALOG_THRESHOLD:int = const(80) # optimal value for Windows 10 is around 200
+ANALOG_THRESHOLD:int = const(100) # optimal value for Windows 10 is around 200
 DEBUG:bool = const(True)
