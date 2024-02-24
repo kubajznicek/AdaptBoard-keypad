@@ -11,25 +11,12 @@ MATRIX_ACTIONS = {
 }
 
 ANALOG_ACTIONS = {
-    # 7: {
-    #     True: lambda cc, m, val: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
-    #     False: lambda cc, m, val: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
-    #     "steps": 18,
-    #     "type": "rotational",
-    # },
-    9: {
-        True: lambda cc, m, val: m.move(x=int(val/2)),
-        False: lambda cc, m, val: m.move(y=int(val/2)),
-        "steps": 100,
-        "type": "joystick",
+    7: {
+        True: lambda cc, m, val: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
+        False: lambda cc, m, val: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
+        "steps": 18,
+        "type": "rotational",
     },
-    10: {
-        True: lambda cc, m, val: m.move(x=int(val/2)),
-        False: lambda cc, m, val: m.move(y=int(val/2)),
-        "steps": 100,
-        "type": "joystick",
-    },
-
 }
 
 DISPLAY_CONFIG = {

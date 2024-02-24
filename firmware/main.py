@@ -66,12 +66,6 @@ while True:
 
         # process the new reading
         smoothed_value = my_analog.process_new_reading(channel, current_value)
-
-        if ANALOG_ACTIONS[channel]["type"] == "joystick":   # ! nahradit https://github.com/adafruit/Adafruit_CircuitPython_HID/blob/6.1.0/examples/hid_gamepad.py
-            value = my_analog.range_map(int(smoothed_value))
-            ANALOG_ACTIONS[channel][channel == 9](cc, mouse, value)
-            continue
-        
         current_step = my_analog.calculate_current_step(channel, smoothed_value)
 
         # check if the step has changed
