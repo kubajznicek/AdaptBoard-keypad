@@ -167,8 +167,69 @@ class AnalogSignalProcessor:
             return self.channel_state[channel] - self.__channel_settings[channel]["step_size"]
         
         else:
-            # print("stay")
-            return self.channel_state[channel]
+            return self.channel_state[channel]  # 0 - 65535
+        
+    def calculate_joystick_value(self, value: int) -> int:
+        """
+        Calculates the joystick value for a given channel.
+
+        This function takes a value and returns the calculated joystick value.
+
+        -100 to 100 (% of the maximum joystick movement)
+
+        with 0 being the center (default) position, -100 being the maximum left position, and 100 being the maximum right position.
+
+        Parameters
+        ----------
+            value (int): The value to calculate the joystick value for.
+
+        Returns
+        -------
+            int: The calculated joystick value.
+
+        """
+
+        # Shift the range from [0, 65535] to [-32768, 32767]
+        shifted_value = value - 32768
+
+        # Scale the range from [-32768, 32767] to [-100, 100]
+        scaled_value = shifted_value / 327.68
+
+        # Apply an exponential scale
+        exponent = 2  # Adjust this value as needed
+        sign = -1 if scaled_value < 0 else 1  # Store the sign of the value
+        exponential_value = sign * (abs(scaled_value) / 100) ** exponent * 100
+
+        return int(exponential_value)
+    
+    def range_map(self, value:int, in_min=0 , in_max=65535, out_min=-127, out_max=127, deadzone_threshold=5) -> int:
+        """
+        Maps a value from one range to another.
+
+        This function takes a value and maps it from one range to another.
+
+        Parameters
+        ----------
+            x (int): The value to map.
+            in_min (int): The lower bound of the input range.
+            in_max (int): The upper bound of the input range.
+            out_min (int): The lower bound of the output range.
+            out_max (int): The upper bound of the output range.
+            deadzone_threshold (int): The threshold for the joystick deadzone.
+
+        Returns
+        -------
+            int: The mapped value.
+
+        """
+        # Map the value from the input range to the output range
+        mapped_value = (value - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
+
+        # If the mapped value is within the deadzone, return the center value
+        if abs(mapped_value) < deadzone_threshold:
+            return 0
+
+        return mapped_value
 
     def process_new_reading(self, channel: int, current_value: int) -> int:
         """
