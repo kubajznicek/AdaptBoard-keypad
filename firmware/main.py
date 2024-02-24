@@ -8,6 +8,7 @@ import neopixel # type: ignore
 import usb_hid  # type: ignore
 from adafruit_hid.consumer_control import ConsumerControl # type: ignore
 from adafruit_hid.keyboard import Keyboard  # type: ignore
+from adafruit_hid.mouse import Mouse  # type: ignore
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS # type: ignore
 
 # local imports
@@ -25,6 +26,7 @@ pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)   # https://learn.adafruit.com/ada
 cc = ConsumerControl(usb_hid.devices)
 kbd = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(kbd)
+mouse = Mouse(usb_hid.devices)
 if DISPLAY_CONFIG["present"]:
     i2c = busio.I2C(board.A3, board.A2)     # https://docs.circuitpython.org/en/latest/shared-bindings/busio/index.html
     my_display = display(i2c, 0x3C, DISPLAY_CONFIG)
@@ -64,9 +66,13 @@ while True:
 
         # process the new reading
         smoothed_value = my_analog.process_new_reading(channel, current_value)
-        current_step = my_analog.calculate_current_step(channel, smoothed_value)
 
-        # print(moving_average, my_analog.channel_state[channel], current_step, current_value, 0, my_analog.__channel_settings[channel]["step_size"], my_analog.__channel_settings[channel]["step_size"]*2, my_analog.__channel_settings[channel]["step_size"]*3)
+        if ANALOG_ACTIONS[channel]["type"] == "joystick":   # ! nahradit https://github.com/adafruit/Adafruit_CircuitPython_HID/blob/6.1.0/examples/hid_gamepad.py
+            value = my_analog.range_map(int(smoothed_value))
+            ANALOG_ACTIONS[channel][channel == 9](cc, mouse, value)
+            continue
+        
+        current_step = my_analog.calculate_current_step(channel, smoothed_value)
 
         # check if the step has changed
         if my_analog.channel_state[channel] == current_step:
@@ -74,7 +80,7 @@ while True:
 
         # if the step has changed, perform the action
         increased = my_analog.channel_state[channel] < current_step
-        ANALOG_ACTIONS[channel][increased](cc)
+        ANALOG_ACTIONS[channel][increased](cc, mouse, 0)
 
         # update the channel state
         my_analog.channel_state[channel] = current_step
