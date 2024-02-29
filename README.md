@@ -1,10 +1,16 @@
 # AdaptBoard keypad
 
-custom macro keypad with swappable modules
+Custom build macropad with swappable modules, based on Key Boar 2040.
 
 ## Features
 
-- 3x3 keypad
+- 4x5 grid for modules
+- button module
+- potentiometer module
+- linear potentiometer module
+- lcd module
+
+
 lol zatim to nic neumi
 
 ## Parts

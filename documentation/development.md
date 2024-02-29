@@ -1,6 +1,7 @@
 # Developing for AdaptBoard-keypad
 
 AdaptBoard software is written in CircuitPython, a subset of Python 3. It is designed to be easy to use and to run on microcontrollers with small amounts of RAM and flash memory. CircuitPython is open source and available on [GitHub](https://github.com/adafruit/circuitpython).
+[CircuitPython tricks](https://github.com/todbot/circuitpython-tricks)
 
 ## Getting Started
 
@@ -10,11 +11,18 @@ To get started, you'll need to install the latest version of CircuitPython for y
 
 The following libraries are required for the AdaptBoard-keypad to work:
 
+<<<<<<< HEAD
+- adafruit_display_text
+- adafruit_hid
+- adafruit_pixelbuf.mpy
+- neopixel.mpy
+=======
 adafruit_pixelbuf.mpy
 neopixel.mpy
 adafruit_hid
+>>>>>>> main
 
-program for displaying output from serial port
+program for displaying output from serial port:
 - Linux **screen** or **minicom**
 - Windows **PuTTY**
 
