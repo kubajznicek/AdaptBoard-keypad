@@ -1,2 +1,23 @@
 # unziped circuit python bundle
 adafruit-circuitpython-bundle-*
+
+# app dependencies
+/node_modules
+**/node_modules
+**/node_modules/**
+
+# app production
+/build
+**/build
+**/build**
+
+# pcb design backup
+*.kicad_pcb-bak
+**/pcb-backups/**
+*/gerber
+*/iterations
+
+log
+*.log
+.vscode
+*.bkp

@@ -116,17 +116,10 @@
       },
       "rules": {
         "max_error": 0.005,
-<<<<<<< HEAD
         "min_clearance": 0.254,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.3,
         "min_hole_clearance": 0.254,
-=======
-        "min_clearance": 0.19999999999999998,
-        "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.0,
-        "min_hole_clearance": 0.25,
->>>>>>> main
         "min_hole_to_hole": 0.254,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
@@ -194,11 +187,7 @@
           "drill": 0.0
         },
         {
-<<<<<<< HEAD
           "diameter": 0.9,
-=======
-          "diameter": 0.7,
->>>>>>> main
           "drill": 0.3
         }
       ],
@@ -412,7 +401,7 @@
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "error",
+      "pin_to_pin": "warning",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
       "simulation_model_issue": "ignore",
@@ -427,18 +416,14 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "pcb.kicad_pro",
+    "filename": "1x1.kicad_pro",
     "version": 1
   },
   "net_settings": {
     "classes": [
       {
         "bus_width": 12,
-<<<<<<< HEAD
         "clearance": 0.26,
-=======
-        "clearance": 0.2,
->>>>>>> main
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -448,7 +433,6 @@
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-<<<<<<< HEAD
         "track_width": 0.3,
         "via_diameter": 0.9,
         "via_drill": 0.3,
@@ -464,7 +448,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "3.3V",
-        "pcb_color": "rgba(255, 0, 0, 0.729)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
         "via_diameter": 0.9,
@@ -481,7 +465,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "GND",
-        "pcb_color": "rgb(109, 40, 0)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
         "via_diameter": 0.9,
@@ -498,7 +482,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "RAW",
-        "pcb_color": "rgb(59, 14, 32)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
         "via_diameter": 0.9,
@@ -515,16 +499,11 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "analog",
-        "pcb_color": "rgb(30, 4, 255)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.3,
         "via_diameter": 0.9,
         "via_drill": 0.3,
-=======
-        "track_width": 0.25,
-        "via_diameter": 0.8,
-        "via_drill": 0.4,
->>>>>>> main
         "wire_width": 6
       }
     ],
@@ -532,32 +511,7 @@
       "version": 3
     },
     "net_colors": null,
-<<<<<<< HEAD
-    "netclass_assignments": {
-      "+3.3V": "3.3V",
-      "GND": "GND",
-      "Net-(J10-Pin_3)": "analog",
-      "Net-(J11-Pin_3)": "analog",
-      "Net-(J12-Pin_3)": "analog",
-      "Net-(J13-Pin_3)": "analog",
-      "Net-(J14-Pin_3)": "analog",
-      "Net-(J15-Pin_3)": "analog",
-      "Net-(J16-Pin_3)": "analog",
-      "Net-(J17-Pin_3)": "analog",
-      "Net-(J18-Pin_3)": "analog",
-      "Net-(J19-Pin_3)": "analog",
-      "Net-(J20-Pin_3)": "analog",
-      "Net-(J21-Pin_5)": "RAW",
-      "Net-(J23-Pin_9)": "analog",
-      "Net-(J25-Pin_1)": "analog",
-      "Net-(J25-Pin_2)": "analog",
-      "Net-(J25-Pin_3)": "analog",
-      "Net-(J25-Pin_4)": "analog",
-      "Net-(J25-Pin_5)": "analog"
-    },
-=======
     "netclass_assignments": null,
->>>>>>> main
     "netclass_patterns": []
   },
   "pcbnew": {
@@ -607,7 +561,7 @@
   },
   "sheets": [
     [
-      "7cd41366-658c-4c64-bfa9-b0a6b780fad4",
+      "4badd998-baa9-4f60-ad99-cdcaa0ecdce6",
       ""
     ]
   ],
