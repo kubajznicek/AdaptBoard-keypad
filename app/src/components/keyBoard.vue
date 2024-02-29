@@ -15,18 +15,18 @@ export default {
   name: 'KeyBoard',
   methods: {
     updateSC() {
-        let SCKeys = [];
-        for (let line in this.keys) {
-            for (let key in this.keys[line]) {
-                if (this.keys[line][key].checked) {
-                    this.keys[line][key].checked = false;
-                    SCKeys.push(this.keys[line][key].value);
-                }
-            }
+      let SCKeys = [];
+      for (let line in this.keys) {
+        for (let key in this.keys[line]) {
+          if (this.keys[line][key].checked) {
+            this.keys[line][key].checked = false;
+            SCKeys.push(this.keys[line][key].value);
+          }
         }
-        if (SCKeys.length !== 0) {
-            this.$emit('shortCut', SCKeys);
-        }
+      }
+      if (SCKeys.length !== 0) {
+        this.$emit('shortCut', SCKeys);
+      }
     }
   },
   data () {

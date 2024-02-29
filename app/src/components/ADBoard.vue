@@ -1,128 +1,210 @@
 <template>
-    <div>
-        <p>{{ keys[0] }}</p>
-        <p>{{ selectedKey }}</p>
-        <p>{{ shortCut }}</p>
-        <div class="AD-Board">
-          <div
-            class="AD-Key"
-            v-for="(key, index) in keys"
-            :key="'Key' + key.id"
+  <div>
+    <div class="AD-Board">
+      <div
+        class="AD-Key"
+        v-for="(key, index) in keys"
+        :key="'Key' + key.id"
+      >
+        <input
+          type="radio"
+          name="radio"
+          :id="'radio-' + index"
+          :value="index"
+          v-model="selectedKey"
+        />
+        <label :for="'radio-' + index">
+          <p>Key {{ key.id }}</p>
+          <!-- select shuffle/switch -->
+          <select
+            name="select"
+            v-model="keys[index]['type']"
           >
-            <input
-              type="radio"
-              name="radio"
-              :id="'radio-' + index"
-              :value="key.id"
-              v-model="selectedKey"
-            />
-            <label :for="'radio-' + index">
-              <p>Key {{ key.id }}</p>
-              <!-- select shuffle/switch -->
-              <select
-                v-if="keys[index].id > 11"
-                name="select"
-                v-model="keys[index]['type']"
-              >
-                <option value="switch">Switch</option>
-                <option value="shuffle">Shuffle</option>
-                <option value="text">Text</option>
-              </select>
+            <option value="switch">Switch</option>
+            <option value="shuffle" v-if="keys[index].id > 11">Shuffle</option>
+            <option value="text">Text</option>
+            <option value="pot">Potmeter</option>
+            <option value="display">Display</option>
+          </select>
 
-              <p class="only-switch" v-if="keys[index].id < 12">only switch</p>
-
-              <!-- shortcut display -->
-              <div
-                class="short-cut-on-key"
-                v-if="keys[index]['type'] === 'switch'"
-              >
-                <div v-for="(item, i) in keys[index]['shortCut']" :key="i">
-                  <p>{{ item }}</p>
-                  <p v-if="i < keys[index]['shortCut'].length - 1">+</p>
-                </div>
-              </div>
-              <div v-else-if="keys[index]['type'] === 'text'">
-                <input
-                  v-model="keys[index]['text']"
-                  @keypress="blockString($event)"
-                  type="text"
-                  name="text"
-                  onpaste="return false;"
-                  autocomplete="off"
-                />
-              </div>
-
-              <!-- shuffle action select -->
-              <div class="shuffle-cl" v-if="keys[index]['type'] === 'shuffle'">
-                <select
-                  name="shuffleSelect"
-                  v-model="keys[index]['shuffleAction']"
-                >
-                  <option :value="['VOLUME_INCREMENT', 'VOLUME_DECREMENT']">
-                    Volume control
-                  </option>
-                  <option
-                    :value="['BRIGHTNESS_INCREMENT','BRIGHTNESS_DECREMENT']"
-                  >
-                    Brightness control
-                  </option>
-                </select>
-                <div>
-                  <button @click="shuffleDirChange(index)">
-                    <p v-if="keys[index]['shuffleDir'] === 'down'">↓</p>
-                    <p v-if="keys[index]['shuffleDir'] === 'up'">↑</p>
-                  </button>
-                  <!-- work in progress here ↓ -->
-                  <input
-                    @keypress="blockNumber($event)"
-                    type="number"
-                    name="steps"
-                    min="0"
-                    max="100"
-                    onpaste="return false;"
-                    v-model="keys[index]['steps']"
-                  />
-                </div>
-              </div>
-            </label>
+          <!-- shortcut display -->
+          <div
+            class="short-cut-on-key"
+            v-if="keys[index]['type'] === 'switch'"
+          >
+            <div v-for="(item, i) in keys[index]['shortCut']" :key="i">
+              <p>{{ item }}</p>
+              <p v-if="i < keys[index]['shortCut'].length - 1">+</p>
+            </div>
           </div>
-        </div>
+
+          <!-- text box -->
+          <div v-else-if="keys[index]['type'] === 'text'">
+            <input
+              v-model="keys[index]['text']"
+              @keypress="blockString($event)"
+              type="text"
+              name="text"
+              onpaste="return false;"
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- shuffle action select -->
+          <div class="shuffle-cl" v-if="keys[index]['type'] === 'shuffle' || keys[index]['type'] === 'pot'">
+            <select
+              name="shuffleSelect"
+              v-model="keys[index]['shuffleAction']"
+            >
+              <option :value="['VOLUME_INCREMENT', 'VOLUME_DECREMENT']">
+                Volume control
+              </option>
+              <option
+                :value="['BRIGHTNESS_INCREMENT','BRIGHTNESS_DECREMENT']"
+              >
+                Brightness control
+              </option>
+            </select>
+            <div>
+              <button @click="shuffleDirChange(index)">
+                <p v-if="keys[index]['shuffleDir'] === 'down'">↓</p>
+                <p v-if="keys[index]['shuffleDir'] === 'up'">↑</p>
+              </button>
+              <!-- work in progress here ↓ -->
+              <input
+                @keypress="blockNumber($event)"
+                type="number"
+                name="steps"
+                min="0"
+                max="100"
+                onpaste="return false;"
+                v-model="keys[index]['steps']"
+              />
+            </div>
+          </div>
+        </label>
+      </div>
     </div>
+    <button @click="saveFile()">Save</button>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    shortCut: String
+    shortCut: Array
   },
   name: 'ADBoard',
   methods: {
-      shuffleDirChange(index) {
-          if (this.keys[index]['shuffleDir'] === 'down') {
-              this.keys[index]['shuffleDir'] = 'up';
-          } else if (this.keys[index]['shuffleDir'] === 'up') {
-              this.keys[index]['shuffleDir'] = 'down';
+    shuffleDirChange(index) {
+      if (this.keys[index]['shuffleDir'] === 'down') {
+        this.keys[index]['shuffleDir'] = 'up';
+      } else if (this.keys[index]['shuffleDir'] === 'up') {
+        this.keys[index]['shuffleDir'] = 'down';
+      }
+    },
+    saveFile() {
+      console.log("save")
+      let stringFile = 'from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore\nfrom adafruit_hid.keycode import Keycode # type: ignore\nfrom micropython import const # type: ignore\n\n';
+      // create MATRIX_ACTIONS
+      stringFile += 'MATRIX_ACTIONS = {\n';
+      for (let i = 0; i < this.keys.length; i++) {
+        // if it is shortcut
+        if (this.keys[i].type === "switch" || this.keys[i].type === "text" && this.keys[i].ccCode == false) {
+          if (this.keys[i].type === "switch" && this.keys[i].ccCode == false) {
+            stringFile += '    ' + this.keys[i].id + ': lambda cc, kdb: kdb.send(';
+            for (let j = 0; j < this.keys[i].shortCut.length; j++) {
+              const element = this.keys[i].shortCut[j];
+              stringFile += 'Keycode.' + element;
+              if (j != this.keys[i].shortCut.length - 1) {
+                stringFile += ', ';
+              }
+            }
+            stringFile += '),\n';
+          } else if (this.keys[i].type === "text" && this.keys[i].ccCode == false) {
+            stringFile += '    ' + this.keys[i].id + ': lambda cc, kdb: layout.write("' + this.keys[i].text + '"),\n';
           }
-      },
+        }
+      }
+      stringFile += '}\n\n';
+
+      // create ANALOG_ACTIONS
+      stringFile += 'ANALOG_ACTIONS = {\n';
+      for (let i = 0; i < this.keys.length; i++) {
+        if (this.keys[i].type === "shuffle" || this.keys[i].type === "pot") {
+          stringFile += '    ' + this.keys[i].id + ': {\n';
+          stringFile += '        ' + 'True: lambda cc: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[0]) : String(this.keys[i].shuffleAction[1])) + '),\n';
+          stringFile += '        ' + 'False: lambda cc: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[1]) : String(this.keys[i].shuffleAction[0])) + '),\n';
+          stringFile += '        ' + `"steps": ${this.keys[i].steps},\n`;
+          stringFile += '        ' + '"type": "' + this.keys[i].type + '",\n';
+          stringFile += '    },\n';
+        }
+      }
+      stringFile += '}\n\n';
+
+      // display turn on
+      stringFile += 'DISPLAY_CONFIG = {\n    "present": const(';
+      for (let i = 0; i < this.keys.length; i++) {
+        if (this.keys[i].type === "display") {
+          stringFile += 'True';
+          break;
+        } else if (i === this.keys.length - 1){
+          stringFile += 'False';
+        }
+      }
+      stringFile += ')}),\n    "WIDTH": const(128),\n    "HEIGHT": const(32),\n}';
+      stringFile += '\n\nANALOG_THRESHOLD = const(100)';
+
+      const blob = new Blob([stringFile], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.download = "config.py";
+      link.href = window.URL.createObjectURL(blob);
+      link.click();
+      link.remove();
+    },
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }, 
+    blockString(event) {
+      if (event.key === '"') {
+        event.preventDefault();
+      }
+    },
+    blockNumber(event) {
+      if (['+', '-', '.'].includes(event.key)) {
+        event.preventDefault();
+      }
+      if (event.key === '0' && event.target.value === '') {
+        event.preventDefault();
+      }
+  },
+  },
+  watch: {
+    shortCut: function (newVal) {
+      for (let i = 0; i < newVal.length; i++) {
+        this.keys[this.selectedKey]['shortCut'] = newVal;        
+      }
+    },
   },
   data() {
-      let keys = [];
-      for (let i = 19; i >= 0; i--) {
-          keys.push({
-              id: i,
-              type: "switch",
-              shortCut: ['CTRL', 'C'],
-              ccCode: false,
-              shuffleAction: ['VOLUME_INCREMENT', 'VOLUME_DECREMENT'],
-              text: "",
-              shuffleDir: "up",
-              steps: 18,
-          });
-      }
-      return {
-          keys: keys,
-          selectedKey: 19,
-      }
+    let keys = [];
+    for (let i = 19; i >= 0; i--) {
+      keys.push({
+        id: i,
+        type: "switch",
+        shortCut: ['CTRL', 'C'],
+        ccCode: false,
+        shuffleAction: ['VOLUME_INCREMENT', 'VOLUME_DECREMENT'],
+        text: "",
+        shuffleDir: "up",
+        steps: 18,
+        display: false,
+      });
+    }
+    return {
+      keys: keys,
+      selectedKey: 0,
+    }
   },
 }
 </script>

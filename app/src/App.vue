@@ -1,12 +1,10 @@
 <template>
   <div class="template">
     <h1>AdBoard</h1>
-    <ADBoard shortCut="Matej"/>
+    <ADBoard :shortCut="ShortCut"/>
     <div v-if="SCBoard">
       <KeyBoard @shortCut="handleShortCut"/>
-      <p>{{ data }}</p>
     </div>
-    <p>{{ ShortCut }}</p>
   </div>
 </template>
 
@@ -27,7 +25,7 @@ export default {
     return {
       data: '',
       SCBoard: true,
-      ShortCut: 'ShortCut: ',
+      ShortCut: [],
     }
   }
 }
