@@ -13,7 +13,6 @@ adafruit-circuitpython-bundle-*
 
 # pcb design backup
 *.kicad_pcb-bak
-**/pcb-backups/**
 */gerber
 */iterations
 
