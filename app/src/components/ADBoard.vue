@@ -104,7 +104,6 @@ export default {
       }
     },
     saveFile() {
-      console.log("save")
       let stringFile = 'from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore\nfrom adafruit_hid.keycode import Keycode # type: ignore\nfrom micropython import const # type: ignore\n\n';
       // create MATRIX_ACTIONS
       stringFile += 'MATRIX_ACTIONS = {\n';
@@ -112,7 +111,7 @@ export default {
         // if it is shortcut
         if (this.keys[i].type === "switch" || this.keys[i].type === "text" && this.keys[i].ccCode == false) {
           if (this.keys[i].type === "switch" && this.keys[i].ccCode == false) {
-            stringFile += '    ' + this.keys[i].id + ': lambda cc, kdb: kdb.send(';
+            stringFile += '    ' + this.keys[i].id + ': lambda cc, kdb, layout: kdb.send(';
             for (let j = 0; j < this.keys[i].shortCut.length; j++) {
               const element = this.keys[i].shortCut[j];
               stringFile += 'Keycode.' + element;
@@ -122,7 +121,7 @@ export default {
             }
             stringFile += '),\n';
           } else if (this.keys[i].type === "text" && this.keys[i].ccCode == false) {
-            stringFile += '    ' + this.keys[i].id + ': lambda cc, kdb: layout.write("' + this.keys[i].text + '"),\n';
+            stringFile += '    ' + this.keys[i].id + ': lambda cc, kdb, layout:   .write("' + this.keys[i].text + '"),\n';
           }
         }
       }
@@ -132,7 +131,7 @@ export default {
       stringFile += 'ANALOG_ACTIONS = {\n';
       for (let i = 0; i < this.keys.length; i++) {
         if (this.keys[i].type === "shuffle" || this.keys[i].type === "pot") {
-          stringFile += '    ' + this.keys[i].id + ': {\n';
+          stringFile += '    ' + (Number(this.keys[i].id) - 4) + ': {\n';
           stringFile += '        ' + 'True: lambda cc: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[0]) : String(this.keys[i].shuffleAction[1])) + '),\n';
           stringFile += '        ' + 'False: lambda cc: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[1]) : String(this.keys[i].shuffleAction[0])) + '),\n';
           stringFile += '        ' + `"steps": ${this.keys[i].steps},\n`;
@@ -152,7 +151,7 @@ export default {
           stringFile += 'False';
         }
       }
-      stringFile += ')}),\n    "WIDTH": const(128),\n    "HEIGHT": const(32),\n}';
+      stringFile += '),\n    "WIDTH": const(128),\n    "HEIGHT": const(32),\n}';
       stringFile += '\n\nANALOG_THRESHOLD = const(100)';
 
       const blob = new Blob([stringFile], { type: "text/plain" });
@@ -177,7 +176,30 @@ export default {
       if (event.key === '0' && event.target.value === '') {
         event.preventDefault();
       }
-  },
+    },
+    try() {
+      let keys = [];
+      let f = 20;
+      for (let i = 0; i < 5; i++) {
+        f -= 4;
+        for (let k = 0; k < 4; k++) {
+          keys.push({
+          id: f,
+          type: "switch",
+          shortCut: ['LEFT_CONTROL', 'C'],
+          ccCode: false,
+          shuffleAction: ['VOLUME_INCREMENT', 'VOLUME_DECREMENT'],
+          text: "",
+          shuffleDir: "up",
+          steps: 18,
+          display: false,
+        });
+        f++;
+        }
+        f -= 4;
+      };
+      this.keys = keys;
+    }
   },
   watch: {
     shortCut: function (newVal) {
@@ -186,23 +208,12 @@ export default {
       }
     },
   },
+  mounted() {
+    this.try();
+  },
   data() {
-    let keys = [];
-    for (let i = 19; i >= 0; i--) {
-      keys.push({
-        id: i,
-        type: "switch",
-        shortCut: ['CTRL', 'C'],
-        ccCode: false,
-        shuffleAction: ['VOLUME_INCREMENT', 'VOLUME_DECREMENT'],
-        text: "",
-        shuffleDir: "up",
-        steps: 18,
-        display: false,
-      });
-    }
     return {
-      keys: keys,
+      keys: [],
       selectedKey: 0,
     }
   },
