@@ -23,7 +23,7 @@
             <option value="switch">Switch</option>
             <option value="shuffle" v-if="keys[index].id > 11">Shuffle</option>
             <option value="text">Text</option>
-            <option value="pot">Potmeter</option>
+            <option value="pot" v-if="keys[index].id > 3">Potmeter</option>
             <option value="display">Display</option>
           </select>
 
@@ -132,8 +132,8 @@ export default {
       for (let i = 0; i < this.keys.length; i++) {
         if (this.keys[i].type === "shuffle" || this.keys[i].type === "pot") {
           stringFile += '    ' + (Number(this.keys[i].id) - 4) + ': {\n';
-          stringFile += '        ' + 'True: lambda cc: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[0]) : String(this.keys[i].shuffleAction[1])) + '),\n';
-          stringFile += '        ' + 'False: lambda cc: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[1]) : String(this.keys[i].shuffleAction[0])) + '),\n';
+          stringFile += '        ' + 'True: lambda cc, mouse: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[0]) : String(this.keys[i].shuffleAction[1])) + '),\n';
+          stringFile += '        ' + 'False: lambda cc, mouse: cc.send(ConsumerControlCode.' + (this.keys[i].shuffleDir === 'up' ? String(this.keys[i].shuffleAction[1]) : String(this.keys[i].shuffleAction[0])) + '),\n';
           stringFile += '        ' + `"steps": ${this.keys[i].steps},\n`;
           stringFile += '        ' + '"type": "' + this.keys[i].type + '",\n';
           stringFile += '    },\n';
