@@ -3,7 +3,7 @@
       <section>
         <section>
           <div class="line" v-for="(line, iL) in keys" :key="iL">
-            <div class="key" v-for="(key, iK) in line" :style="{flexGrow: key.size}">
+            <div class="key" v-for="(key, iK) in line" :style="{flexGrow: key.size}" :key="'keys' + iK">
               <div v-if="!key.gap">
                 <input type="checkbox" v-model="key.checked" :id="'key-' + key.text + iK">
                 <label :for="'key-' + key.text + iK">{{ key.text }}</label>
@@ -15,7 +15,7 @@
         </section>
         <section>
           <div class="line" v-for="(line, iL) in keys1" :key="iL">
-            <div class="key" :class="{gap: key.noBtn }" v-for="(key, iK) in line" :style="{flexGrow: key.size} ">
+            <div class="key" :class="{gap: key.noBtn }" v-for="(key, iK) in line" :style="{flexGrow: key.size} " :key="'keys1' + iK">
               <div v-if="!key.gap">
                 <input type="checkbox" v-model="key.checked" :id="'key-' + key.text + iK">
                 <label :for="'key-' + key.text + iK">{{ key.text }}</label>
@@ -27,7 +27,7 @@
         </section>
         <section>
           <div class="line" v-for="(line, iL) in keys2" :key="iL">
-            <div class="key" :class="{gap: key.noBtn }" v-for="(key, iK) in line" :style="{flexGrow: key.size} ">
+            <div class="key" :class="{gap: key.noBtn }" v-for="(key, iK) in line" :style="{flexGrow: key.size} " :key="'keys2' + iK">
               <div v-if="!key.gap">
                 <input type="checkbox" v-model="key.checked" :id="'key-' + key.text + iK">
                 <label :for="'key-' + key.text + iK">{{ key.text }}</label>
