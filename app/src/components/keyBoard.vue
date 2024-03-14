@@ -1,11 +1,43 @@
 <template>
     <form @submit.prevent="">
-        <div class="line" v-for="(line, iL) in keys" :key="iL">
+      <section>
+        <section>
+          <div class="line" v-for="(line, iL) in keys" :key="iL">
             <div class="key" v-for="(key, iK) in line" :style="{flexGrow: key.size}">
+              <div v-if="!key.gap">
                 <input type="checkbox" v-model="key.checked" :id="'key-' + key.text + iK">
                 <label :for="'key-' + key.text + iK">{{ key.text }}</label>
+              </div>
+              <div v-if="key.gap" class="gap">
+              </div>
             </div>
-        </div>
+          </div>
+        </section>
+        <section>
+          <div class="line" v-for="(line, iL) in keys1" :key="iL">
+            <div class="key" :class="{gap: key.noBtn }" v-for="(key, iK) in line" :style="{flexGrow: key.size} ">
+              <div v-if="!key.gap">
+                <input type="checkbox" v-model="key.checked" :id="'key-' + key.text + iK">
+                <label :for="'key-' + key.text + iK">{{ key.text }}</label>
+              </div>
+              <div v-if="key.noBtn" class="key gap">
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="line" v-for="(line, iL) in keys2" :key="iL">
+            <div class="key" :class="{gap: key.noBtn }" v-for="(key, iK) in line" :style="{flexGrow: key.size} ">
+              <div v-if="!key.gap">
+                <input type="checkbox" v-model="key.checked" :id="'key-' + key.text + iK">
+                <label :for="'key-' + key.text + iK">{{ key.text }}</label>
+              </div>
+              <div v-if="key.noBtn" class="key gap">
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
         <button type="button" @click="updateSC">Save ShortCut</button>
     </form>
 </template>
@@ -24,6 +56,22 @@ export default {
           }
         }
       }
+      for (let line in this.keys1) {
+        for (let key in this.keys1[line]) {
+          if (this.keys1[line][key].checked) {
+            this.keys1[line][key].checked = false;
+            SCKeys.push(this.keys1[line][key].value);
+          }
+        }
+      }
+      for (let line in this.keys2) {
+        for (let key in this.keys2[line]) {
+          if (this.keys2[line][key].checked) {
+            this.keys2[line][key].checked = false;
+            SCKeys.push(this.keys2[line][key].value);
+          }
+        }
+      }
       if (SCKeys.length !== 0) {
         this.$emit('shortCut', SCKeys);
       }
@@ -31,7 +79,7 @@ export default {
   },
   data () {
     return {
-        keys: {
+      keys: {
         "line-0": [
           { checked: false, value: 'ESCAPE', text: 'Esc', size: 1 },
           { checked: false, value: 'F1', text: 'F1', size: 1 },
@@ -118,7 +166,69 @@ export default {
           { term: false, value: 'APPLICATION', text: 'Menu', size: 1 },
           { term: false, value: 'RIGHT_CONTROL', text: 'Ctrl', size: 1 },
         ]
-      }
+      },
+      keys1: {
+        "line_01": [
+          {  checked: false, value: 'PRINT_SCREEN', text: 'Prt Scr', size: 1 },
+          { checked: false, value: 'SCROLL_LOCK', text: 'Scroll lock', size: 1 },
+          { checked: false, value: 'PAUSE', text: 'Pause Break', size: 1 },
+        ],
+        "line_02": [
+          { checked: false, value: 'INSERT', text: 'Insert', size: 1 },
+          { checked: false, value: 'HOME', text: 'Home', size: 1 },
+          { checked: false, value: 'PAGE_UP', text: 'Page Up', size: 1 },
+        ],
+        "line_03": [
+          { checked: false, value: 'DELETE', text: 'Delete', size: 1 },
+          { checked: false, value: 'END', text: 'End', size: 1 },
+          { checked: false, value: 'PAGE_DOWN', text: 'Page Down', size: 1 },
+        ],
+        "line_04": [
+          { checked: false, value: 'PAGE_DOWN', text: '<span>&#x200B;</span>', size: 1 , noBtn: true},
+        ],
+        "line_05": [
+          { checked: false, value: 'UP_ARROW', text: '←', size: 1, noBtn: true},
+          { checked: false, value: 'UP_ARROW', text: '↑', size: 1 },
+          { checked: false, value: 'UP_ARROW', text: '→', size: 1, noBtn: true},
+        ],
+        "line_06": [
+          { checked: false, value: 'LEFT_ARROW', text: '←', size: 1 },
+          { checked: false, value: 'DOWN_ARROW', text: '↓', size: 1 },
+          { checked: false, value: 'RIGHT_ARROW', text: '→', size: 1 },
+        ]
+      },
+      keys2: {
+        "line_01": [
+          { checked: false, value: 'NUM_LOCK', text: 'Num Lock', size: 1, noBtn: true },
+        ],
+        "line_02": [
+          { checked: false, value: 'NUM_LOCK', text: 'Num Lock', size: 1 },
+          { checked: false, value: 'KEYPAD_FORWARD_SLASH', text: '/', size: 1 },
+          { checked: false, value: 'KEYPAD_ASTERISK', text: '*', size: 1 },
+          { checked: false, value: 'KEYPAD_MINUS', text: '-', size: 1 },
+        ],
+        "line_03": [
+          { checked: false, value: 'KEYPAD_SEVEN', text: '7', size: 1 },
+          { checked: false, value: 'KEYPAD_EIGHT', text: '8', size: 1 },
+          { checked: false, value: 'KEYPAD_NINE', text: '9', size: 1 },
+          { checked: false, value: 'KEYPAD_PLUS', text: '+', size: 1 },
+        ],
+        "line_04": [
+          { checked: false, value: 'KEYPAD_FOUR', text: '4', size: 1 },
+          { checked: false, value: 'KEYPAD_FIVE', text: '5', size: 1 },
+          { checked: false, value: 'KEYPAD_SIX', text: '6', size: 1 },
+        ],
+        "line_05": [
+          { checked: false, value: 'KEYPAD_ONE', text: '1', size: 1 },
+          { checked: false, value: 'KEYPAD_TWO', text: '2', size: 1 },
+          { checked: false, value: 'KEYPAD_THREE', text: '3', size: 1 },
+          { checked: false, value: 'KEYPAD_ENTER', text: 'Enter', size: 1 },
+        ],
+        "line_06": [
+          { checked: false, value: 'KEYPAD_ZERO', text: '0', size: 2 },
+          { checked: false, value: 'KEYPAD_PERIOD', text: '.', size: 1 },
+        ]
+      },
     }
   
   }
@@ -126,8 +236,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+form > section {
+  display: flex;
+  width: 100%;
+  gap: 10px
+}
 .line {
-    display: flex;
+  display: flex;
+  flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 5px;
@@ -135,10 +251,11 @@ export default {
     margin-bottom: 5px;
 }
 .key {
+  height: 100%;
     input[type="checkbox"]:checked + label {
         background-color: #b1b1b1;
     }
-    > label {
+     label {
         background-color: #fff;
         border-radius: 5px;
         display: flex;
@@ -154,14 +271,18 @@ export default {
             background-color: #d4d4d4;
         }
     }
-    > p {
+     p {
         font-size: 0.7rem;
     }
 
     input {
         display: none;
     }
-}
+  }
+  .gap {
+    width: 2px;
+    visibility: hidden;
+  }
 button {
   border: none;
   border-radius: 5px;
