@@ -63,7 +63,6 @@ console.log(GBVar.ADKeys);
         > input[type="radio"]:checked + label {
             background-color: #b1b1b1;
         }
-
     }
 }
 </style>

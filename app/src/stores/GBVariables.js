@@ -17,7 +17,7 @@ export const useGBVar = defineStore('Variables', () => {
                 ccCode: false,
                 shuffleAction: ['VOLUME_INCREMENT', 'VOLUME_DECREMENT'],
                 text: "",
-                shuffleDir: "up",
+                potDir: "up",
                 steps: 18,
                 display: false,
                 info: 'Ctrl + C',

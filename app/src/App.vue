@@ -1,26 +1,29 @@
 <template>
+  <main>
+  <h1>AdBoard</h1>
   <div class="template">
-    <h1>AdBoard</h1>
-    <!-- <main> -->
       <ADBoard_2 />
-    <!-- </main> -->
-    <!-- <ADBoard :shortCut="ShortCut"/>
-    <div v-if="SCBoard">
-      <KeyBoard @shortCut="handleShortCut"/>
-    </div> -->
-  </div>
+      <KeySettings />
+      <!-- <ADBoard :shortCut="ShortCut"/>
+        <div v-if="SCBoard">
+          <KeyBoard @shortCut="handleShortCut"/>
+        </div> -->
+      </div>
+    </main>
 </template>
 
 <script>
 import KeyBoard from './components/keyBoard.vue'
 import ADBoard from './components/ADBoard.vue'
 import ADBoard_2 from './components/ADBoard_2.vue';
+import KeySettings from './components/configSection/KeySettings.vue';
 
 export default {
   components: {
     KeyBoard,
     ADBoard,
-    ADBoard_2
+    ADBoard_2,
+    KeySettings
   },
   methods: {
     handleShortCut(data){
@@ -43,7 +46,9 @@ main {
 }
 .template {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
+  flex-wrap: wrap;
+  flex-direction: row;
   gap: 20px;
   justify-content: space-around;
 }
