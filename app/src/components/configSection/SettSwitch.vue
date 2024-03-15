@@ -23,7 +23,7 @@
     </section>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onUnmounted } from 'vue';
 import { useGBVar } from '../../stores/GBVariables';
 const GBVar = useGBVar();
 
@@ -34,13 +34,19 @@ onMounted(() => {
 });
 function updateInfo() {
     if (GBVar.ADKeys[GBVar.ActiveKey].action === 'text') {
+        GBVar.ADKeys[GBVar.ActiveKey].ccCode = false;
         GBVar.ADKeys[GBVar.ActiveKey].info = 'Text: ' + GBVar.ADKeys[GBVar.ActiveKey].text;
     } else if (GBVar.ADKeys[GBVar.ActiveKey].action == 'short cut') {
+        GBVar.ADKeys[GBVar.ActiveKey].ccCode = false;
         GBVar.ADKeys[GBVar.ActiveKey].info = 'Short cut: ';
     } else if (GBVar.ADKeys[GBVar.ActiveKey].action == 'Fn action') {
         GBVar.ADKeys[GBVar.ActiveKey].info = 'Fn action: ' + GBVar.ADKeys[GBVar.ActiveKey].fn.info;
+        GBVar.ADKeys[GBVar.ActiveKey].ccCode = true;
     }
 }
+// onUnmounted(() => {
+//     GBVar.ADKeys[GBVar.ActiveKey].ccCode = false;
+// });
 </script>
 <style scoped lang="scss">
 .home {
