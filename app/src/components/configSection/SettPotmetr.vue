@@ -17,7 +17,6 @@
             v-model="GBVar.ADKeys[GBVar.ActiveKey].steps"
             @keypress="blockNumber($event)"
         />
-        <p></p>
     </section>
 </template>
 <script setup>

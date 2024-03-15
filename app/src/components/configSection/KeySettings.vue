@@ -9,7 +9,7 @@
             </div>
         </section>
         <SettSwitch v-if="sw === 'switch'"/>
-        <SettPotmetr v-if="sw === 'potmetr'"/>
+        <SettPotmetr v-if="sw === 'pot'"/>
         <SettShuffle v-if="sw === 'shuffle'"/>
         <SettDisplay v-if="sw === 'display'"/>
     </section>
@@ -23,7 +23,7 @@ import SettDisplay from './SettDisplay.vue';
 import { useGBVar } from '../../stores/GBVariables';
 const GBVar = useGBVar();
 
-const modules = ['switch', 'potmetr', 'shuffle', 'display'];
+const modules = ['switch', 'pot', 'shuffle', 'display'];
 
 
 let sw = ref(GBVar.ADKeys[GBVar.ActiveKey].type);

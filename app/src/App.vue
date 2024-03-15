@@ -1,14 +1,14 @@
 <template>
   <main>
-  <h1>AdBoard</h1>
-  <div class="template">
+    <h1>AdBoard</h1>
+    <div class="template">
       <ADBoard_2 />
       <KeySettings />
       <!-- <ADBoard :shortCut="ShortCut"/>
         <div v-if="SCBoard">
           <KeyBoard @shortCut="handleShortCut"/>
         </div> -->
-      </div>
+    </div>
     </main>
 </template>
 
@@ -46,7 +46,6 @@ main {
 }
 .template {
   display: flex;
-  // flex-direction: column;
   flex-wrap: wrap;
   flex-direction: row;
   gap: 20px;
