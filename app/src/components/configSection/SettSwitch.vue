@@ -7,23 +7,21 @@
             </div>
         </section>
         <section v-if="GBVar.ADKeys[GBVar.ActiveKey].action === 'text'">
-            <input
-            type="text"
-            name="textArea"
-            autocomplete="off"
-            onpaste="return false;"
-            v-model="GBVar.ADKeys[GBVar.ActiveKey].text"
-            @input="updateInfo()">
+            <textarea name="textArea" id="" cols="30" rows="3" onpaste="return false" v-model="GBVar.ADKeys[GBVar.ActiveKey].text" @input="updateInfo" @keypress="blockString($event)"></textarea>
         </section>
         <section v-if="GBVar.ADKeys[GBVar.ActiveKey].action === 'Fn action'">
             <select name="FnAction" @change="updateInfo" v-model="GBVar.ADKeys[GBVar.ActiveKey].fn" >
                 <option v-for="fce in GBVar.fn" :key="fce" :value="fce">{{ fce.info }}</option>
             </select>
         </section>
+        <section v-if="GBVar.ADKeys[GBVar.ActiveKey].action === 'short cut'" class="ShCut">
+            <section><p>Aktualni zkratka: </p><p>{{GBVar.ADKeys[GBVar.ActiveKey].info}}</p></section>
+            <button @click="newShFce()">Přepsat zkratku</button>
+        </section>
     </section>
 </template>
 <script setup>
-import { onMounted, ref, onUnmounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useGBVar } from '../../stores/GBVariables';
 const GBVar = useGBVar();
 
@@ -32,21 +30,53 @@ const functions = ['text', 'short cut', 'Fn action'];
 onMounted(() => {
     updateInfo();
 });
+function blockString(event) {
+    if (event.key === '"') {
+        event.preventDefault();
+    }
+}
 function updateInfo() {
     if (GBVar.ADKeys[GBVar.ActiveKey].action === 'text') {
         GBVar.ADKeys[GBVar.ActiveKey].ccCode = false;
         GBVar.ADKeys[GBVar.ActiveKey].info = 'Text: ' + GBVar.ADKeys[GBVar.ActiveKey].text;
     } else if (GBVar.ADKeys[GBVar.ActiveKey].action == 'short cut') {
         GBVar.ADKeys[GBVar.ActiveKey].ccCode = false;
-        GBVar.ADKeys[GBVar.ActiveKey].info = 'Short cut: ';
+        ShInfo();
     } else if (GBVar.ADKeys[GBVar.ActiveKey].action == 'Fn action') {
         GBVar.ADKeys[GBVar.ActiveKey].info = 'Fn action: ' + GBVar.ADKeys[GBVar.ActiveKey].fn.info;
         GBVar.ADKeys[GBVar.ActiveKey].ccCode = true;
     }
+};
+function ShInfo() {
+    GBVar.ADKeys[GBVar.ActiveKey].info = '';
+    for (let i = 0; i < GBVar.ADKeys[GBVar.ActiveKey].shortCut.length; i++) {
+        GBVar.ADKeys[GBVar.ActiveKey].info += GBVar.ADKeys[GBVar.ActiveKey].shortCut[i].text
+        if (i < GBVar.ADKeys[GBVar.ActiveKey].shortCut.length - 1) {
+            GBVar.ADKeys[GBVar.ActiveKey].info += ' + ';
+        }
+    }
+};
+function newShFce() {
+    const workVar = [];
+    for (let i = 0; i < GBVar.SCKeys.length; i++){
+        for (let k = 0; k < GBVar.SCKeys[i].length; k++) {
+            for (let o = 0; o < GBVar.SCKeys[i][k].length; o++) {
+                const key = GBVar.SCKeys[i][k][o];
+                if (key.checked) {
+                    workVar.push({value: key.value, text: key.text});
+                    key.checked = false;
+                }
+            }
+        }
+    }
+    if (workVar.length != 0) {
+        GBVar.ADKeys[GBVar.ActiveKey].shortCut = workVar
+        ShInfo();
+    }
 }
-// onUnmounted(() => {
-//     GBVar.ADKeys[GBVar.ActiveKey].ccCode = false;
-// });
+watch(() => GBVar.$state.ActiveKey, (newVal, oldVal) => {
+    ShInfo();
+  });
 </script>
 <style scoped lang="scss">
 .home {
@@ -82,4 +112,28 @@ function updateInfo() {
         }
     }
 }
+.ShCut {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    > section {
+        display: flex;
+        gap: 5px;
+        > p:last-child {
+            font-weight: bold;
+        }
+    }
+}
+textarea {
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    &:active,
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}   
 </style>
