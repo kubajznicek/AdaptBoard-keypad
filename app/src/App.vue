@@ -8,7 +8,10 @@
         <div v-if="SCBoard">
           <KeyBoard @shortCut="handleShortCut"/>
         </div> -->
+        <!-- <KeyBoard /> -->
+        <SCBoard />
     </div>
+    <button @click="fileGenerate">Save to config file</button>
     </main>
 </template>
 
@@ -17,13 +20,91 @@ import KeyBoard from './components/keyBoard.vue'
 import ADBoard from './components/ADBoard.vue'
 import ADBoard_2 from './components/ADBoard_2.vue';
 import KeySettings from './components/configSection/KeySettings.vue';
+import SCBoard from './components/SCBoard.vue';
+import { useGBVar } from './stores/GBVariables';
 
 export default {
   components: {
     KeyBoard,
     ADBoard,
     ADBoard_2,
-    KeySettings
+    KeySettings,
+    SCBoard,
+  },
+  setup() {
+    const GBvar = useGBVar();
+    function fileGenerate() {
+      let stringFile = 'from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore\nfrom adafruit_hid.keycode import Keycode # type: ignore\nfrom micropython import const # type: ignore\n\n';
+
+      // create matrix
+      stringFile += 'MATRIX_ACTIONS = {\n';
+      for (let i = 0; i < GBvar.ADKeys.length; i++) {
+        const key = GBvar.ADKeys[i];
+        if (key.type === 'switch') {
+          stringFile += `    ${key.id}: lambda cc, kdb, layout:`;
+
+          // if short cut
+          if (key.action === 'short cut') {
+            stringFile += `kdb.send(`;
+            for (let j = 0; j < key.shortCut.length; j++) {
+              const element = key.shortCut[j].value;
+              stringFile += 'Keycode.' + element;
+              if (j != key.shortCut.length - 1) {
+                stringFile += ', ';
+              }
+            }
+            stringFile += '),\n';
+          }
+
+          // if text
+          if (key.action === 'text') {
+            stringFile += `   .write("${key.text}"),\n`;
+          }
+          // FN function
+          if (key.action === 'Fn action') {
+
+          }
+        }
+      }
+      stringFile += '}\n\n';
+
+      // create Analog
+      stringFile += 'ANALOG_ACTIONS = {\n';
+      for (let i = 0; i < GBvar.ADKeys.length; i++) {
+        const key = GBvar.ADKeys[i];
+        if (key.type === 'shuffle' || key.type === 'pot') {
+          stringFile += `    ${key.id}: {\n`;
+          stringFile += '        ' + 'True: lambda cc, mouse: cc.send(ConsumerControlCode.' + (key.potDir === 'up' ? String(key.shuffleAction[0]) : String(key.shuffleAction[1])) + '),\n';
+          stringFile += '        ' + 'False: lambda cc, mouse: cc.send(ConsumerControlCode.' + (key.potDir === 'up' ? String(key.shuffleAction[1]) : String(key.shuffleAction[0])) + '),\n';
+          stringFile += `        "steps": ${key.steps},\n`;
+          stringFile += `        "type": ${key.type},\n`;
+          stringFile += `    },\n`;
+        }
+      }
+      stringFile += '}\n\n';
+
+      // display on
+      stringFile += 'DISPLAY_CONFIG = {\n    "present": const(';
+      for (let i = 0; i < GBvar.ADKeys.length; i++) {
+        const key = GBvar.ADKeys[i];
+        if (key.type === "display") {
+          stringFile += 'True';
+          break;
+        } else if (i === GBvar.ADKeys.length - 1){
+          stringFile += 'False';
+        }
+      }
+      stringFile += '),\n    "WIDTH": const(128),\n    "HEIGHT": const(32),\n}';
+      stringFile += '\n\nANALOG_THRESHOLD = const(100)';
+
+      const blob = new Blob([stringFile], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.download = "config.py";
+      link.href = window.URL.createObjectURL(blob);
+      link.click();
+      link.remove();
+    }
+    return {fileGenerate};
   },
   methods: {
     handleShortCut(data){
@@ -43,6 +124,9 @@ export default {
 <style lang="scss" scoped>
 main {
   margin: 0px 10px;
+  > button {
+    margin: 15px 0px;
+  }
 }
 .template {
   display: flex;

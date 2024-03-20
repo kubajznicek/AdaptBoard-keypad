@@ -11,11 +11,9 @@
     </section>
 </template>
 <script setup>
-import { ref } from 'vue';
 import { useGBVar } from '../stores/GBVariables';
 
 const GBVar = useGBVar();
-console.log(GBVar.ADKeys);
 </script>
 <style lang="scss">
 .ADBoard {
@@ -28,6 +26,7 @@ console.log(GBVar.ADKeys);
     .key {
         display: inherit;
         min-width: 120px;
+        overflow: auto;
         > input {
             display: none;
         }

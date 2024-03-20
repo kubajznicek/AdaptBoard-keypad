@@ -15,7 +15,7 @@
     </section>
 </template>
 <script setup>
-import { reactive, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import SettSwitch from './SettSwitch.vue';
 import SettPotmetr from './SettPotmetr.vue';
 import SettShuffle from './SettShuffle.vue';
