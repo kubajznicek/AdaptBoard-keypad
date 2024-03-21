@@ -15,7 +15,7 @@ export const useGBVar = defineStore('Variables', () => {
         { action: 'SCAN_PREVIOUS_TRACK', info: 'Previous track' },
         { action: 'STOP', info: 'Stop' },
         { action: 'VOLUME_DECREMENT', info: 'Volume Down' },
-        { action: 'VOLUME_DECREMENT', info: 'Volume Down' },
+        { action: 'VOLUME_INCREMENT', info: 'Volume Up' },
     ]
 
     let keys = [];

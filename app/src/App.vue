@@ -41,7 +41,7 @@ export default {
       for (let i = 0; i < GBvar.ADKeys.length; i++) {
         const key = GBvar.ADKeys[i];
         if (key.type === 'switch') {
-          stringFile += `    ${key.id}: lambda cc, kdb, layout:`;
+          stringFile += `    ${key.id}: lambda cc, kdb, layout: `;
 
           // if short cut
           if (key.action === 'short cut') {
@@ -58,11 +58,11 @@ export default {
 
           // if text
           if (key.action === 'text') {
-            stringFile += `   .write("${key.text}"),\n`;
+            stringFile += `layout.write("""${key.text}"""),\n`;
           }
           // FN function
           if (key.action === 'Fn action') {
-
+            stringFile += `cc.send(ConsumerControlCode.${key.fn.action}),\n`;
           }
         }
       }
@@ -73,11 +73,11 @@ export default {
       for (let i = 0; i < GBvar.ADKeys.length; i++) {
         const key = GBvar.ADKeys[i];
         if (key.type === 'shuffle' || key.type === 'pot') {
-          stringFile += `    ${key.id}: {\n`;
+          stringFile += `    ${key.id - 4}: {\n`;
           stringFile += '        ' + 'True: lambda cc, mouse: cc.send(ConsumerControlCode.' + (key.potDir === 'up' ? String(key.shuffleAction[0]) : String(key.shuffleAction[1])) + '),\n';
           stringFile += '        ' + 'False: lambda cc, mouse: cc.send(ConsumerControlCode.' + (key.potDir === 'up' ? String(key.shuffleAction[1]) : String(key.shuffleAction[0])) + '),\n';
           stringFile += `        "steps": ${key.steps},\n`;
-          stringFile += `        "type": ${key.type},\n`;
+          stringFile += `        "type": "${key.type}",\n`;
           stringFile += `    },\n`;
         }
       }
