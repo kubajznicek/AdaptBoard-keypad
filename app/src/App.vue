@@ -11,7 +11,7 @@
         <!-- <KeyBoard /> -->
         <SCBoard />
     </div>
-    <button @click="fileGenerate">Save to config file</button>
+    <button @click="saveAs">Save as</button>
     </main>
 </template>
 
@@ -35,14 +35,12 @@ export default {
     const GBvar = useGBVar();
     function fileGenerate() {
       let stringFile = 'from adafruit_hid.consumer_control_code import ConsumerControlCode # type: ignore\nfrom adafruit_hid.keycode import Keycode # type: ignore\nfrom micropython import const # type: ignore\n\n';
-
       // create matrix
       stringFile += 'MATRIX_ACTIONS = {\n';
       for (let i = 0; i < GBvar.ADKeys.length; i++) {
         const key = GBvar.ADKeys[i];
         if (key.type === 'switch') {
           stringFile += `    ${key.id}: lambda cc, kdb, layout: `;
-
           // if short cut
           if (key.action === 'short cut') {
             stringFile += `kdb.send(`;
@@ -55,7 +53,6 @@ export default {
             }
             stringFile += '),\n';
           }
-
           // if text
           if (key.action === 'text') {
             stringFile += `layout.write("""${key.text}"""),\n`;
@@ -67,7 +64,6 @@ export default {
         }
       }
       stringFile += '}\n\n';
-
       // create Analog
       stringFile += 'ANALOG_ACTIONS = {\n';
       for (let i = 0; i < GBvar.ADKeys.length; i++) {
@@ -97,14 +93,25 @@ export default {
       stringFile += '),\n    "WIDTH": const(128),\n    "HEIGHT": const(32),\n}';
       stringFile += '\n\nANALOG_THRESHOLD = const(100)';
 
-      const blob = new Blob([stringFile], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.download = "config.py";
-      link.href = window.URL.createObjectURL(blob);
-      link.click();
-      link.remove();
+      return stringFile;
     }
-    return {fileGenerate};
+    async function saveAs() {
+      let fileHandle = await window.showSaveFilePicker({
+        suggestedName: 'config.py',
+        types: [
+          {
+            description: "Python file",
+            accept: {
+              "text/plain": [".py"],
+            },
+          },
+        ],
+      });
+      let stream = await fileHandle.createWritable();
+      await stream.write(fileGenerate());
+      await stream.close();
+    }
+    return {fileGenerate, saveAs};
   },
   methods: {
     handleShortCut(data){

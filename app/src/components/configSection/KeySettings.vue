@@ -46,9 +46,17 @@ const handleChange = (event) => {
 .modules {
     display: flex;
     gap: 10px;
-    justify-content: space-around;
+    // justify-content: space-around;
     margin: 10px 0px;
-
+    > div {
+        width: 25%;
+        display: flex;
+        
+        > label {
+            width: 100%;
+            text-align: center;
+        }
+    }
     input[type="radio"]:checked + label {
         background-color: #b1b1b1;
     }
