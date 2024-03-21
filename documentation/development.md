@@ -11,20 +11,10 @@ To get started, you'll need to install the latest version of CircuitPython for y
 
 The following libraries are required for the AdaptBoard-keypad to work:
 
-<<<<<<< HEAD
 - adafruit_display_text
 - adafruit_hid
 - adafruit_pixelbuf.mpy
 - neopixel.mpy
-=======
-adafruit_pixelbuf.mpy
-neopixel.mpy
-adafruit_hid
->>>>>>> main
-
-program for displaying output from serial port:
-- Linux **screen** or **minicom**
-- Windows **PuTTY**
 
 
 ## Developing
@@ -41,10 +31,26 @@ cp -r main.py /media/$USER/CIRCUITPY/
 
 ## Debugging
 
-To debug your code, you can use the serial output. You can use the following command to display the output:
+programs for displaying output from serial port:
+- Linux **screen** or **minicom**
+- Windows **PuTTY**
 
-```bash
-sudo screen /dev/ttyACM0
-```
+### Steps
+- Connect the board to your computer using a USB cable.
+- The board should appear as a USB drive named CIRCUITPY.
+- Find the serial port for the board.
+    - On Windows, you can use the Device Manager to find the serial port.
 
+    - On Linux, you can use the following command to list the serial ports:
 
+    ```bash
+    ls /dev/ttyACM*
+    ``` 
+
+- Connect to the serial port using the serial terminal program.
+    - On Windows, you can use PuTTY to connect to the serial port.
+
+    - On Linux, you can use the screen command to connect to the serial port.
+    ```bash
+    sudo screen /dev/ttyACM0 # replace with your port
+    ```

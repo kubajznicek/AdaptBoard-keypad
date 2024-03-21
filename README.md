@@ -1,27 +1,30 @@
 # AdaptBoard keypad
 
-Custom build macropad with swappable modules, based on Key Boar 2040.
+Custom macropad with swappable modules, based on Key Boar 2040.
 
 ## Features
 
-- 4x5 grid for modules
-- button module
+- swappable modules
+- 4x5 grid
+- serial communication
+
+#### Different modules
+- key switch module
 - potentiometer module
-- linear potentiometer module
+- slide potentiometer module
 - lcd module
+- joystick module
 
-
-lol zatim to nic neumi
 
 ## Parts
 
 - [Kee Boar 2040](https://www.adafruit.com/product/5302)
 - custom PCB
-- mechanical switches
+- mechanical keyboard switches
 - [potenciometr](https://www.laskakit.cz/psotenciometr-posuvny-10kohm--modul/)
 - [linear potenciometr](https://www.laskakit.cz/potenciometr-rk097n-3-10k-linearni-10k--/)
 - [analog multiplexer](https://www.laskakit.cz/analogovy-multiplexer-16-kanalu-cd74hc4067/)
-- keycaps
+- #D printed keycaps
 - 3D printed case
 
 ## links
