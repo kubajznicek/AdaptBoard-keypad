@@ -51,6 +51,8 @@ export const useGBVar = defineStore('Variables', () => {
                 { checked: false, value: 'ESCAPE', text: 'Esc', size: 1 },
                 { value: 1, text: 'gap', size: 1 },
                 { checked: false, value: 'F1', text: 'F1', size: 1 },
+                { checked: false, value: 'F2', text: 'F2', size: 1 },
+                { checked: false, value: 'F3', text: 'F3', size: 1 },
                 { checked: false, value: 'F4', text: 'F4', size: 1 },
                 { checked: false, value: 'F5', text: 'F5', size: 1 },
                 { checked: false, value: 'F6', text: 'F6', size: 1 },
