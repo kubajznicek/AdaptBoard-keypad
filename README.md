@@ -5,7 +5,7 @@ Custom macropad with swappable modules, based on Key Boar 2040.
 ## Features
 
 - swappable modules
-- 4x5 grid
+- 4x5 customizable grid
 - serial communication
 
 #### Different modules
@@ -22,13 +22,13 @@ Custom macropad with swappable modules, based on Key Boar 2040.
 - [Kee Boar 2040](https://www.adafruit.com/product/5302)
 - [Analog multiplexer](https://www.laskakit.cz/analogovy-multiplexer-16-kanalu-cd74hc4067/)
 - custom [PCB](./pcb/)
-- mechanical keyboard switches
 - 3D printed case
 - [pin header](https://www.laskakit.cz/dupont-2x40pin-2-54-mm-pinovy-pas/)*
 - [pin header](https://www.laskakit.cz/dupont-40pin-2-54-mm-pinovy-pas/)* for KB2040 and Analog multiplexer
 - any USB-C cable
 
 #### Modules
+- keyboard switch (any standard keyboard switch should work)
 - [potenciometr](https://www.laskakit.cz/psotenciometr-posuvny-10kohm--modul/)*
 - [linear potenciometr](https://www.laskakit.cz/potenciometr-rk097n-3-10k-linearni-10k--/)*
 - [analog multiplexer](https://www.laskakit.cz/analogovy-multiplexer-16-kanalu-cd74hc4067/)*
@@ -57,8 +57,8 @@ Once you have all the parts, you can start building your own AdaptBoard keypad.
 
 #### Soldering
 
-1. Solder pin headers to the Kee Boar 2040 and to he Analog multiplexer
-2. Solder pin first batch of headers to the custom PCB
+1. Solder pin headers to the Kee Boar 2040 and to the Analog multiplexer
+2. Solder first batch of headers to the custom PCB
 ![soldering_step_1](./documentation//images/soldering_step_1.jpg)
 3. Trim the headers on the Kee Boar 2040 and Analog multiplexer, so they are ~1mm above the PCB
 ![soldering_step_3](./documentation//images/soldering_step_3.jpg)
