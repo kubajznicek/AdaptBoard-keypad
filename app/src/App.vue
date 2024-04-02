@@ -4,11 +4,6 @@
     <div class="template">
       <ADBoard_2 />
       <KeySettings />
-      <!-- <ADBoard :shortCut="ShortCut"/>
-        <div v-if="SCBoard">
-          <KeyBoard @shortCut="handleShortCut"/>
-        </div> -->
-        <!-- <KeyBoard /> -->
         <SCBoard />
     </div>
     <button @click="saveAs">Save as</button>
@@ -16,8 +11,6 @@
 </template>
 
 <script>
-import KeyBoard from './components/keyBoard.vue'
-import ADBoard from './components/ADBoard.vue'
 import ADBoard_2 from './components/ADBoard_2.vue';
 import KeySettings from './components/configSection/KeySettings.vue';
 import SCBoard from './components/SCBoard.vue';
@@ -25,8 +18,6 @@ import { useGBVar } from './stores/GBVariables';
 
 export default {
   components: {
-    KeyBoard,
-    ADBoard,
     ADBoard_2,
     KeySettings,
     SCBoard,

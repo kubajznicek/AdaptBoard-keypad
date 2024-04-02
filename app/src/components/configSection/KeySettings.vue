@@ -3,7 +3,7 @@
         <section class="modules">
             <div v-for="(item, i) in modules" :key="item + i">
                 <input type="radio" name="modulesSwitch" :id="'modulesSwitch' + item" :value="item" v-model="sw" @change="handleChange($event)"/>
-                <label :for="'modulesSwitch' + item">
+                <label :for="'modulesSwitch' + item" v-if="!(GBVar.ActiveKey > 15 &&  (item === 'pot' || item === 'shuffle'))">
                     {{ item }}
                 </label>
             </div>
@@ -23,8 +23,7 @@ import SettDisplay from './SettDisplay.vue';
 import { useGBVar } from '../../stores/GBVariables';
 const GBVar = useGBVar();
 
-const modules = ['switch', 'pot', 'shuffle', 'display'];
-
+const modules = ['pot', 'switch', 'display', 'shuffle'];
 
 let sw = ref(GBVar.ADKeys[GBVar.ActiveKey].type);
 watch(() => GBVar.ActiveKey, (newVal) => {
@@ -46,7 +45,6 @@ const handleChange = (event) => {
 .modules {
     display: flex;
     gap: 10px;
-    // justify-content: space-around;
     margin: 10px 0px;
     > div {
         width: 25%;
