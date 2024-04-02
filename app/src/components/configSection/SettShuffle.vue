@@ -20,7 +20,7 @@
     </section>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { onMounted } from 'vue';
 import { useGBVar } from '../../stores/GBVariables';
 const GBVar = useGBVar();
 

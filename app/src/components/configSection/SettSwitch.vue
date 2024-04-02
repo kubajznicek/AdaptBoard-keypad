@@ -21,7 +21,7 @@
     </section>
 </template>
 <script setup>
-import { onMounted, watch } from 'vue';
+import { onMounted } from 'vue';
 import { useGBVar } from '../../stores/GBVariables';
 const GBVar = useGBVar();
 
@@ -31,10 +31,6 @@ onMounted(() => {
     updateInfo();
 });
 function blockString(event) {
-    // if (event.key === '"') {
-    //     event.preventDefault();
-    // }
-
     const blocked = [ '"', 'Ě', 'ě', 'Š', 'š', 'Č', 'č', 'Ř', 'ř', 'Ž', 'ž', 'Ý', 'ý', 'Á', 'á', 'Í', 'í', 'É', 'é', 'Ú', 'ú', 'Ů', 'ů', 'Ó', 'ó', 'Ď', 'ď', 'Ť', 'ť', 'Ň', 'ň']
     if (blocked.includes(event.key)) {
         event.preventDefault();
@@ -79,8 +75,6 @@ function newShFce() {
         ShInfo();
     }
 }
-watch(() => GBVar.$state.ActiveKey, (newVal, oldVal) => {
-});
 </script>
 <style scoped lang="scss">
 .home {
