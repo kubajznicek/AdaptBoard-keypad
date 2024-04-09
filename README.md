@@ -70,7 +70,7 @@ Then solder the Kee Boar 2040 and Analog multiplexer to the back side of the PCB
 @TODO
 
 #### Programming
-1. Install [CircuitPython](https://learn.adafruit.com/adafruit-kb2040/circuitpython) on your Kee Boar 2040
+1. Install [CircuitPython](https://learn.adafruit.com/adafruit-kb2040/circuitpython) on your Kee Boar 2040 __Developed and tested on CircuitPython version 8.2.7__
 2. Delete the `code.py` file from the CIRCUITPY drive
 3. Upload our [firmware](./firmware/) to the CIRCUITPY drive
 The final file structure should look like this:
