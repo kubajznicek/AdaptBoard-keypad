@@ -7,7 +7,7 @@ from adafruit_display_text import label # type: ignore
 
 
 class ssd1306_display:
-    def __init__(self, i2c: busio.I2C, I2C_ADDRESS: hex, DISPLAY_CONFIG: dict) -> None:
+    def __init__(self, i2c: busio.I2C, I2C_ADDRESS: hexadecimal, DISPLAY_CONFIG: dict) -> None: # type: ignore
         try:
             display_bus = displayio.I2CDisplay(i2c, device_address=I2C_ADDRESS)
         except ValueError:

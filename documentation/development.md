@@ -40,7 +40,7 @@ usb_midi.disable()
 
 [Adafruit device docs](https://learn.adafruit.com/customizing-usb-devices-in-circuitpython/circuitpy-midi-serial)
 
-If you disabled `'storage.disable_usb_drive()'` in boot.py, you can enable it by entering safe mode. To enter safe mode, press the reset button twice.
+If you disabled `storage.disable_usb_drive()` in boot.py, you can enable it by entering safe mode. To enter safe mode, press the reset button twice.
 
 When in safe mode **no code will be executed** and the CIRCUITPY drive will be mounted and you can edit the `boot.py` file.
 

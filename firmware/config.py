@@ -11,12 +11,12 @@ MATRIX_ACTIONS = {
 }
 
 ANALOG_ACTIONS = {
-    # 7: {
-    #     True: lambda cc, m, val: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
-    #     False: lambda cc, m, val: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
-    #     "steps": 18,
-    #     "type": "rotational",
-    # },
+    11: {
+        True: lambda cc, mouse: cc.send(ConsumerControlCode.VOLUME_DECREMENT),
+        False: lambda cc, mouse: cc.send(ConsumerControlCode.VOLUME_INCREMENT),
+        "steps": 18,
+        "type": "rotational",
+    },
 }
 
 DISPLAY_CONFIG = {
