@@ -21,3 +21,6 @@ log
 *.log
 .vscode
 *.bkp
+
+# Firebase cache
+**/.firebase/
