@@ -87,4 +87,4 @@ CIRCUITPY
     main.py
     ssd1306_display.py
 ```
-4. Go to [our App](lukasovaCoolAplikace) and create your own layout and configuration
+4. Go to [our App](https://adaptboard-c6996.web.app/) and create your own layout and configuration
