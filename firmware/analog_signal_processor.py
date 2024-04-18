@@ -7,7 +7,7 @@ from functions import set_digital_pin
 from config import ANALOG_ACTIONS, ANALOG_THRESHOLD
 
 class AnalogSignalProcessor:
-    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin],channels_to_scan: list, window_size:int = 5) -> None:
+    def __init__(self, analog_pin: microcontroller.Pin, mpc_pins: tuple[microcontroller.Pin, microcontroller.Pin, microcontroller.Pin, microcontroller.Pin],channels_to_scan: list, window_size:int = 5) -> None: # type: ignore
         self.__analog_pin = AnalogIn(analog_pin)
         self.__mpc_pins = const(self.set_up_pins_for_mpc(mpc_pins))
         self.__channel_settings = ANALOG_ACTIONS
@@ -29,7 +29,7 @@ class AnalogSignalProcessor:
             moving_average = sum(self.analog_values[channel]) / len(self.analog_values[channel])
             self.channel_state[channel] = round(moving_average / self.__channel_settings[channel]["step_size"]) * self.__channel_settings[channel]["step_size"]
 
-    def set_up_pins_for_mpc(self, mpc_pins: tuple[microcontroller.Pin]) -> tuple[digitalio.DigitalInOut]:
+    def set_up_pins_for_mpc(self, mpc_pins: tuple[microcontroller.Pin, microcontroller.Pin, microcontroller.Pin, microcontroller.Pin]) -> tuple[digitalio.DigitalInOut]: # type: ignore
         """
         Sets up the specified pins for the analog multiplexer.
 
@@ -256,6 +256,6 @@ class AnalogSignalProcessor:
             self.analog_values[channel].pop(0)
 
         # Calculate the moving average of the recent readings
-        moving_average = sum(self.analog_values[channel]) / len(self.analog_values[channel])
+        moving_average = int(sum(self.analog_values[channel]) / len(self.analog_values[channel]))
 
         return moving_average

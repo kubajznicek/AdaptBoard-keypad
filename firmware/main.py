@@ -52,7 +52,7 @@ while True:
     if key_event and key_event.pressed:
         key_action = MATRIX_ACTIONS.get(key_event.key_number, False)
         if key_action:
-            key_action(cc, kbd, layout)
+            key_action(cc, kbd, layout) # type: ignore
         else:
             print(f"WARNING!  -  Key {key_event.key_number} not configured")
         # if key_event.key_number == 4: # ! for development purposes only
@@ -74,7 +74,7 @@ while True:
 
         # if the step has changed, perform the action
         increased = my_analog.channel_state[channel] < current_step
-        ANALOG_ACTIONS[channel][increased](cc, mouse, 0)
+        ANALOG_ACTIONS[channel][increased](cc, mouse)
 
         # update the channel state
         my_analog.channel_state[channel] = current_step

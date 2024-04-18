@@ -3,7 +3,7 @@ import os
 import time
 import microcontroller # type: ignore
 
-def set_digital_pin(pin: digitalio.DigitalInOut, value: bool) -> None:
+def set_digital_pin(pin: digitalio.DigitalInOut, value: bool) -> None: # type: ignore
     pin.value = value
 
 def log_cpu_info() -> None:
@@ -40,15 +40,15 @@ def print_ram_info():
     Prints RAM information to the console.
     """
     gc.collect()  # run the garbage collector to free up as much RAM as possible
-    total_ram = gc.mem_alloc() + gc.mem_free()
-    used_ram = gc.mem_alloc()
-    free_ram = gc.mem_free()
+    total_ram = gc.mem_alloc() + gc.mem_free() # type: ignore
+    used_ram = gc.mem_alloc() # type: ignore
+    free_ram = gc.mem_free() # type: ignore
 
     print('Total RAM: ', total_ram)
     print('Used RAM: ', used_ram)
     print('Free RAM: ', free_ram)
 
-def set_neopixel_color(pixel: neopixel.NeoPixel, color: Tuple[int, int, int]) -> None:
+def set_neopixel_color(pixel: neopixel.NeoPixel, color: tuple[int, int, int]) -> None: # type: ignore
     """
     Sets the color of the neopixel.
 
@@ -62,7 +62,7 @@ def set_neopixel_color(pixel: neopixel.NeoPixel, color: Tuple[int, int, int]) ->
     """
     pixel.fill(color)
 
-def start_up_blink(pixel: neopixel.NeoPixel):
+def start_up_blink(pixel: neopixel.NeoPixel): # type: ignore
     """
     Blinks the neopixel on startup.
 
