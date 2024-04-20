@@ -55,8 +55,6 @@ while True:
             key_action(cc, kbd, layout) # type: ignore
         else:
             print(f"WARNING!  -  Key {key_event.key_number} not configured")
-        # if key_event.key_number == 4: # ! for development purposes only
-            # layout.write("!@#$%^&*2š()_++}{';/./<?>:[}321654987*/-*/+00|\}]{[::??>><<~12]}]}")
 
 
     #region Analog Read
@@ -74,7 +72,7 @@ while True:
 
         # if the step has changed, perform the action
         increased = my_analog.channel_state[channel] < current_step
-        ANALOG_ACTIONS[channel][increased](cc, mouse)
+        ANALOG_ACTIONS[channel][increased](cc, kbd, mouse)
 
         # update the channel state
         my_analog.channel_state[channel] = current_step
