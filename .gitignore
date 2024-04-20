@@ -11,6 +11,9 @@ adafruit-circuitpython-bundle-*
 **/build
 **/build**
 
+# personal config
+firmware/config.py
+
 # pcb design backup
 *.kicad_pcb-bak
 */gerber
