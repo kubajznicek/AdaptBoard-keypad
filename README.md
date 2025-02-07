@@ -1,6 +1,7 @@
 # AdaptBoard keypad
 
 Custom macropad with swappable modules, based on Key Boar 2040.
+![soldering_step_1](./documentation//images/kuba_keycaps.jpg)
 
 ## Features
 
