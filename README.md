@@ -40,15 +40,6 @@ Custom macropad with swappable modules, based on Key Boar 2040.
 
 <sub>*link to Czech e-shop. You may buy elsewhere, just make sure it is the same part model<sub>
 
-## links
-
-[google drive folder](https://drive.google.com/drive/folders/1B5WahlfOYsu4JCbVDwWN0F7cVlUAn-8o)
-
-[trello](https://trello.com/invite/b/YwTRiuGs/ATTI8b8fdaafa9fa064b24e5904e67b1d3ba91FE0345/studentsk-projekt)
-
-[moodle](https://moodle.ssps.cz/course/view.php?id=1443#section-1)
-
-[dluznicek](https://settleup.app/group/-NeHTvoZh2r6y7cITKMY/join)
 
 
 ## Build your own
