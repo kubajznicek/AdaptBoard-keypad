@@ -38,7 +38,7 @@ Custom macropad with swappable modules, based on Key Boar 2040.
 - [pin socket](https://www.laskakit.cz/dupont-2x20pin-2-54-mm-pinovy-pas--samice/)* 02x04
 - 3D printed keycaps
 
-<sub>*link to Czech e-shop. You may by elsewhere, just make sure it is the same part model<sub>
+<sub>*link to Czech e-shop. You may buy elsewhere, just make sure it is the same part model<sub>
 
 ## links
 
