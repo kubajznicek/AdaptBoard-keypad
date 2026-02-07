@@ -19,6 +19,8 @@ autokey_scripts/*
 *.kicad_pcb-bak
 */gerber
 */iterations
+pcb/pcb-backups
+pcb/1x1/1x1-backups
 
 log
 *.log
