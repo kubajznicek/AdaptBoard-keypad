@@ -72,7 +72,8 @@ while True:
 
         # if the step has changed, perform the action
         increased = my_analog.channel_state[channel] < current_step
-        ANALOG_ACTIONS[channel][increased](cc, kbd, mouse)
+        current_step_number = my_analog.__channel_settings[channel]["steps"] - int(current_step / my_analog.__channel_settings[channel]["step_size"])
+        ANALOG_ACTIONS[channel][increased](cc, kbd, mouse, current_step_number)
 
         # update the channel state
         my_analog.channel_state[channel] = current_step
