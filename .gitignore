@@ -15,6 +15,7 @@ adafruit-circuitpython-bundle-*
 firmware/config.py
 autokey_scripts/*
 config_back.py
+serial_app/config.json
 
 # pcb design backup
 *.kicad_pcb-bak
