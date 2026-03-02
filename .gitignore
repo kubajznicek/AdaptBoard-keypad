@@ -5,11 +5,15 @@ adafruit-circuitpython-bundle-*
 /node_modules
 **/node_modules
 **/node_modules/**
+**/.vite/**
 
 # app production
 /build
 **/build
 **/build**
+/dist
+**/dist
+**/dist/**
 
 # personal config
 firmware/config.py
@@ -31,3 +35,6 @@ log
 
 # Firebase cache
 **/.firebase/
+
+# firebase config
+.firebaserc
